@@ -21,8 +21,8 @@ import javax.swing.JList;
 import javax.swing.AbstractListModel;
 
 /**
- * Listindow class
- * The window which appears after the use has selected an option of database 
+ * ListWindow class
+ * The window which appears after the user has selected an option of database 
  * objects to view and pressed the GO button
  * @author Kaynen Mitchell
  *

@@ -21,9 +21,9 @@ import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * Listindow class
- * The window which appears after the use has selected an option of database 
- * objects to view and pressed the GO button
+ * EditWindow class
+ * The window which appears after the user has selected an option of database 
+ * objects to edit and pressed the Edit button
  * @author Kaynen Mitchell
  *
  */
