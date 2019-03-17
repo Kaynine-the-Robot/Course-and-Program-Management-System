@@ -98,20 +98,53 @@ public class StartWindow {
 		frmWelcomeToSfu.getContentPane().add(exitButton);
 		
 		// components of the go button of the window, which would take you to the next window which belongs to the drop down option the user chose
-		Button goButton = new Button("Go");
-		goButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) 
-			{
-				//selection is the selected index of the drop down menu, 0=faculty, 1=department, 2=program, 3=course
-				int selection = comboBox.getSelectedIndex();
-					// go to view window
-					frmWelcomeToSfu.setVisible(false);
-					ListWindow viewWindow = new ListWindow();
-					viewWindow.main(selection, W, H);
-					frmWelcomeToSfu.setVisible(true);
-			}
-		});
+		// the combo box for the option to view the system as a student or an admin
+				String[] roleOptions = {"Administrator", "Student"};
+				JComboBox<String> roleComboBox = new JComboBox<String>(roleOptions);      		   // comment this line to work with window builder
+				//JComboBox roleComboBox = new JComboBox();
+				roleComboBox.setBounds(170, 262, 249, 32);
+				frmWelcomeToSfu.getContentPane().add(roleComboBox);
+				
+				JLabel viewAs = new JLabel("View As");
+				viewAs.setFont(new Font("Dubai Light", Font.PLAIN, 20));
+				viewAs.setBounds(100, 265, 64, 24);
+				frmWelcomeToSfu.getContentPane().add(viewAs);
+				
+				// components of the go button of the window, which would take you to the next window which belongs to the drop down option the user chose
+				JButton goButton = new JButton("Go");
+				goButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) 
+					{
+						// getting the selections that the user picks from each combo box
+						int componentSelection = comboBox.getSelectedIndex();
+						int roleSelection = roleComboBox.getSelectedIndex();
+						
+						// checking if the user chose administrator
+						if(roleSelection == 0)
+						{
+							frmWelcomeToSfu.setVisible(false);
+							ListWindow facultyWindow = new ListWindow();
+							facultyWindow.main(componentSelection, W, H);
+							frmWelcomeToSfu.setVisible(true);
+						}
+						
+						// if user chose student
+						else
+						{
+							// small for loop that checks which system attribute a student may wish to view
+							for(int i = 0; i < dropDownOptions.length; i++)
+							{
+								if(i == componentSelection)
+								{
+									frmWelcomeToSfu.setVisible(false);
+									ViewWindow windowToView = new ViewWindow(dropDownOptions[i], frmWelcomeToSfu);
+									
+								}
+							}
+						}
+					}
+				});
 		goButton.setBounds(467, 183, 55, 24);
 		frmWelcomeToSfu.getContentPane().add(goButton);
 		
