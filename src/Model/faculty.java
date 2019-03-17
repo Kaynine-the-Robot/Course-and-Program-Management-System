@@ -60,6 +60,11 @@ public class faculty {
 	  
   }
   
+  public static ArrayList<faculty> getFacultySet(){
+	  return facultySet;
+  }
+
+  
   public void removeFaculty() {
 	  facultySet.remove(this);
   }

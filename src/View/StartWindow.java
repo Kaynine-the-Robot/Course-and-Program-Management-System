@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
+import java.awt.Frame;
 
 /**
  * StartWindow class
@@ -25,14 +26,22 @@ import java.awt.Font;
  *
  */
 public class StartWindow {
+	
+	//The Height of the full screen window
+	private static int H;
+	//The width of the full screen window
+	private static int W;
 
 	private JFrame frmWelcomeToSfu;
 
 	/**
 	 * Launch the application.
 	 */
-	public void main() 
+	public void main(int windowWidth, int windowHeight) 
 	{
+		W = windowWidth;
+		H = windowHeight;
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try 
@@ -94,41 +103,13 @@ public class StartWindow {
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
+				//selection is the selected index of the drop down menu, 0=faculty, 1=department, 2=program, 3=course
 				int selection = comboBox.getSelectedIndex();
-				//if(selection == 0)
-				//{
-					// go to faculty window
+					// go to view window
 					frmWelcomeToSfu.setVisible(false);
-					ListWindow facultyWindow = new ListWindow();
-					facultyWindow.main(selection);
+					ListWindow viewWindow = new ListWindow();
+					viewWindow.main(selection, W, H);
 					frmWelcomeToSfu.setVisible(true);
-				/*
-				}
-				
-				else if(selection == 1)
-				{
-					// go to department window
-					frmWelcomeToSfu.setVisible(false);
-					ListWindow facultyWindow = new ListWindow();
-					facultyWindow.main(selection);
-				}
-				
-				else if(selection == 2)
-				{
-					// go to program window
-					frmWelcomeToSfu.setVisible(false);
-					ListWindow facultyWindow = new ListWindow();
-					facultyWindow.main(selection);
-				}
-				
-				else 
-				{
-					// go to course window
-					frmWelcomeToSfu.setVisible(false);
-					ListWindow facultyWindow = new ListWindow();
-					facultyWindow.main(selection);
-				}
-				*/
 			}
 		});
 		goButton.setBounds(467, 183, 55, 24);

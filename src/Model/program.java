@@ -9,7 +9,7 @@ public class program {
 	public ArrayList<course> courseSet = new ArrayList<course>();
 	
 	
-	public boolean setdepartment(department newdepartment) {
+	public boolean setDepartment(department newdepartment) {
 		department olddepartment = itsdepartment;
 		itsdepartment = newdepartment;
 		if(setName(this.name)&&setID(this.ID)) {

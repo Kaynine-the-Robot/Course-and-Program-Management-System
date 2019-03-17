@@ -9,7 +9,7 @@ public class course {
 	public program itsprogram;
 	
 	
-	public boolean setprogram(program newprogram) {
+	public boolean setProgram(program newprogram) {
 		program oldprogram = itsprogram;
 		itsprogram = newprogram;
 		if(setName(this.name,this.courseNum)&&setID(this.ID)) {
@@ -37,7 +37,7 @@ public class course {
 		String nameUpper = name.toUpperCase()+courseNum;
 		itsprogram.courseSet.remove(this);
 		for (int i = 0; i < itsprogram.courseSet.size();i++) {
-			if(itsprogram.courseSet.get(i).getFUllName().toUpperCase().equals(nameUpper)){
+			if(itsprogram.courseSet.get(i).getFullName().toUpperCase().equals(nameUpper)){
 				itsprogram.courseSet.add(this);
 				return false;
 			}
@@ -85,7 +85,7 @@ public class course {
 		return Integer.parseInt(courseNum);
 	}
 	
-	public String getFUllName() {
+	public String getFullName() {
 		return name+courseNum;
 	}
 	
