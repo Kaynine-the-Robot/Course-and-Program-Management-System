@@ -9,8 +9,11 @@ import View.*;
 import Model.*;
 
 public class Main {
-
+	
 	public static void main(String[] args) {
+		
+		LoginFrame login = new LoginFrame();
+		login.runLoginFrame();
 		
 		//Setting the Width and Height of the Screen as Class attributes
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
