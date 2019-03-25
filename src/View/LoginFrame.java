@@ -22,15 +22,17 @@ public class LoginFrame {
 	// User input
 	private Text UserText;
 	private Text UserPassword;
+	private guiWindowController backGUI;
 	
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
-	public void runLoginFrame() {
+	public void runLoginFrame(guiWindowController gui) {
 		try {
-			LoginFrame window = new LoginFrame();
-			window.open();
+			backGUI = gui;
+			//LoginFrame window = new LoginFrame();
+			this.open();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -81,6 +83,8 @@ public class LoginFrame {
 				// checks to see if the user name and the password match
 				if(pass) {
 					shell.dispose();
+					backGUI.toggleForwardChange();
+					backGUI.windowChange();
 //					JOptionPane.showMessageDialog(null, "User valid, proceed");
 				} else {
 					JOptionPane.showMessageDialog(null, "You have entered an invalid username/password");

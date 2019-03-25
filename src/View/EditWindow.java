@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import Controller.guiWindowController;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +42,8 @@ public class EditWindow {
 	private static int W;
 	
 	private JFrame frmEditView;
+	private guiWindowController backGUI;
+	
 	private JTextField textField_4;
 	private JTextField textField_8;
 	private JTextField textField;
@@ -59,8 +64,8 @@ public class EditWindow {
 			public void run() {
 				try 
 				{
-					EditWindow window = new EditWindow();
-					window.frmEditView.setVisible(true);
+					//EditWindow window = new EditWindow();
+					//window.frmEditView.setVisible(true);
 					
 				} catch (Exception e) 
 				{
@@ -73,8 +78,15 @@ public class EditWindow {
 	/**
 	 * Create the application.
 	 */
-	public EditWindow() 
+	public EditWindow(int width, int height, guiWindowController gui, int displayType, boolean addEdit) 
 	{
+		backGUI = gui;
+		W = width;
+		H = height;
+		//Passed on window type, saved for knowing what buttons and menus to display
+		windowType = displayType;
+		//Passed on flag of the two possible button options to display
+		addOrEdit = addEdit;
 		initialize();
 	}
 
@@ -110,6 +122,8 @@ public class EditWindow {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				frmEditView.dispose();
+				backGUI.toggleBackChange();
+				backGUI.windowChange();
 			}
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -130,7 +144,7 @@ public class EditWindow {
 		
 		
 		
-		if(windowType == 1 | windowType == 2 | windowType == 3) {
+		if(backGUI.getListWindowType() == 1 | backGUI.getListWindowType() == 2 | backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu of possible faculties to be under for 
 			//departments, programs, and courses for adding/editing database objects
@@ -147,7 +161,7 @@ public class EditWindow {
 			
 		}
 		
-		if(windowType == 2 | windowType == 3) {
+		if(backGUI.getListWindowType() == 2 | backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu for the drop down menu of possible departments to be under for 
 			//programs and courses for adding/editing database objects
@@ -165,7 +179,7 @@ public class EditWindow {
 		}
 		
 		
-		if(windowType == 3) {
+		if(backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu for the drop down menu of possible programs to be under for 
 			//courses for adding/editing database objects
@@ -241,7 +255,7 @@ public class EditWindow {
 		}
 		
 		//Condition for displaying which buttons for the add window, or the edit window
-		if(addOrEdit) {
+		if(backGUI.getAddOrEdit()) {
 			
 			//Components for the add button, which will add an input to the database
 			JButton btnChange = new JButton("Add");
@@ -264,5 +278,9 @@ public class EditWindow {
 			frmEditView.getContentPane().add(btnDelete);
 		}
 		
+	}
+	
+	public JFrame getFrame() {
+		return frmEditView;
 	}
 }

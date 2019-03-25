@@ -24,6 +24,8 @@ import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 
+import Controller.*;
+
 /**
  * ListWindow class
  * The window which appears after the user has selected an option of database 
@@ -34,13 +36,14 @@ import javax.swing.BorderFactory;
 public class ListWindow {
 	
 	//In this windows case, the type of list to be displayed, i.e. faculties or programs
-	private static int windowType;
+	private static int windowType = 0;
 	//The Height of the full screen window
 	private static int H;
 	//The width of the full screen window
 	private static int W;
-	
+	//The Frame of ListWindow for returning to make visible
 	private JFrame frmListView;
+	private guiWindowController backGUI;
 	/**
 	 * Launch the application.
 	 */
@@ -55,8 +58,8 @@ public class ListWindow {
 			public void run() {
 				try 
 				{
-					ListWindow window = new ListWindow();
-					window.frmListView.setVisible(true);
+					//ListWindow window = new ListWindow();
+					//window.frmListView.setVisible(true);
 					
 				} catch (Exception e) 
 				{
@@ -69,8 +72,11 @@ public class ListWindow {
 	/**
 	 * Create the application.
 	 */
-	public ListWindow() 
+	public ListWindow(int width, int height, guiWindowController gui) 
 	{
+		backGUI = gui;
+		W = width;
+		H = height;
 		initialize();
 	}
 
@@ -106,6 +112,8 @@ public class ListWindow {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				frmListView.dispose();
+				backGUI.toggleBackChange();
+				backGUI.windowChange();
 			}
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -118,7 +126,7 @@ public class ListWindow {
 		list.setFont(new Font("Tahoma", Font.PLAIN, H/30));
 		
 		//Condition for displaying which type of objects in the list, this is for faculties
-		if(windowType == 0) {
+		if(backGUI.getListWindowType() == 0) {
 			list.setModel(new AbstractListModel() {
 				String[] values = new String[] {"Science"};
 				public int getSize() {
@@ -130,7 +138,7 @@ public class ListWindow {
 			});
 		}
 		//Condition for displaying which type of objects in the list, this is for departments
-		else if(windowType == 1) {
+		else if(backGUI.getListWindowType() == 1) {
 			list.setModel(new AbstractListModel() {
 				String[] values = new String[] {"Computer Science"};
 				public int getSize() {
@@ -142,7 +150,7 @@ public class ListWindow {
 			});
 		}
 		//Condition for displaying which type of objects in the list, this is for programs
-		else if(windowType == 2) {
+		else if(backGUI.getListWindowType() == 2) {
 			list.setModel(new AbstractListModel() {
 				String[] values = new String[] {"Undergraduate"};
 				public int getSize() {
@@ -174,15 +182,10 @@ public class ListWindow {
 		btnEditdelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(list.getSelectedIndex());
-				if(list.getSelectedIndex() == 0) { //Will have to be changed to accommodate a list of values, use index's of original list
-						frmListView.setVisible(false);
-						EditWindow facultyWindow = new EditWindow();
-						//Passing on parameters of the what window to display for i.e. Faculty, a boolean of if the next window
-						//is for adding or editing, and the width and heights
-						facultyWindow.main(windowType, false, W, H);
-						frmListView.setVisible(true);
-				}
+				//if(list.getSelectedIndex() == 0) { //Will have to be changed to accommodate a list of values, use index's of original list
+				backGUI.toggleAddAndEdit();	
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
 			}
 		});
 		btnEditdelete.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -194,16 +197,35 @@ public class ListWindow {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				frmListView.setVisible(false);
-				EditWindow facultyWindow = new EditWindow();
-				//Passing on parameters of the what window to display for i.e. Faculty, a boolean of if the next window
-				//is for adding or editing, and the width and heights
-				facultyWindow.main(windowType, true, W, H);
-				frmListView.setVisible(true);
+				backGUI.toggleAddAndEdit();
+				backGUI.toggleAddOrEdit();
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
+				
 			}
 		});
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		btnAdd.setBounds((5*W)/6, H/20, W/8, H/15);
 		frmListView.getContentPane().add(btnAdd);
+		
+		if(backGUI.getListWindowType() != 3) {
+			//Components of the add button to go to that screen and add a new item to the database
+			JButton btnExplore = new JButton("Explore");
+			btnExplore.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					backGUI.toggleForwardChange();
+					backGUI.windowChange();
+				}
+			});
+			btnExplore.setFont(new Font("Tahoma", Font.PLAIN, H/40));
+			btnExplore.setBounds((5*W)/6, H/2, W/8, H/15);
+			frmListView.getContentPane().add(btnExplore);
+		}
 	}
+	
+	public JFrame getFrame() {
+		return frmListView;
+	}
+	
 }

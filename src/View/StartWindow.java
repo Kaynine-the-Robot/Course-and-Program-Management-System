@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import Controller.guiWindowController;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -31,37 +34,18 @@ public class StartWindow {
 	private static int H;
 	//The width of the full screen window
 	private static int W;
-
+	//The Frame of StartWindow for returning to make visible
 	private JFrame frmWelcomeToSfu;
-
-	/**
-	 * Launch the application.
-	 */
-	public void main(int windowWidth, int windowHeight) 
-	{
-		W = windowWidth;
-		H = windowHeight;
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try 
-				{
-					StartWindow window = new StartWindow();
-					window.frmWelcomeToSfu.setVisible(true);
-					
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private guiWindowController backGUI;
 
 	/**
 	 * Create the application.
 	 */
-	public StartWindow() 
+	public StartWindow(int windowWidth, int windowHeight, guiWindowController gui) 
 	{
+		backGUI = gui;
+		W = windowWidth;
+		H = windowHeight;
 		initialize();
 	}
 
@@ -73,7 +57,7 @@ public class StartWindow {
 		// the frame work for the window frame
 		frmWelcomeToSfu = new JFrame();
 		frmWelcomeToSfu.setTitle("Welcome to SFU Course and Program Management ");
-		frmWelcomeToSfu.setBounds(100, 100, 600, 600);
+		frmWelcomeToSfu.setSize(W, H);
 		frmWelcomeToSfu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmWelcomeToSfu.getContentPane().setLayout(null);
 		
@@ -119,29 +103,38 @@ public class StartWindow {
 						// getting the selections that the user picks from each combo box
 						int componentSelection = comboBox.getSelectedIndex();
 						int roleSelection = roleComboBox.getSelectedIndex();
-						
 						// checking if the user chose administrator
 						if(roleSelection == 0)
 						{
-							frmWelcomeToSfu.setVisible(false);
-							ListWindow facultyWindow = new ListWindow();
-							facultyWindow.main(componentSelection, W, H);
-							frmWelcomeToSfu.setVisible(true);
+							frmWelcomeToSfu.dispose();
+							backGUI.toggleForwardChange();
+							backGUI.windowChange();
+						
+							//frmWelcomeToSfu.setVisible(false);
+							//ListWindow facultyWindow = new ListWindow();
+							//facultyWindow.main(componentSelection, W, H);
+							//frmWelcomeToSfu.setVisible(true);
 						}
 						
 						// if user chose student
 						else
 						{
+							frmWelcomeToSfu.dispose();
+							backGUI.toggleForwardChange();
+							backGUI.windowChange();
+							/*
 							// small for loop that checks which system attribute a student may wish to view
 							for(int i = 0; i < dropDownOptions.length; i++)
 							{
 								if(i == componentSelection)
 								{
-									frmWelcomeToSfu.setVisible(false);
-									ViewWindow windowToView = new ViewWindow(dropDownOptions[i], frmWelcomeToSfu);
+									
+									//frmWelcomeToSfu.setVisible(false);
+									//ViewWindow windowToView = new ViewWindow(dropDownOptions[i], frmWelcomeToSfu);
 									
 								}
 							}
+							*/
 						}
 					}
 				});
@@ -156,5 +149,9 @@ public class StartWindow {
 		
 		
 		
+	}
+	
+	public JFrame getFrame() {
+		return frmWelcomeToSfu;
 	}
 }

@@ -1,6 +1,7 @@
 package Controller;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
@@ -12,8 +13,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		LoginFrame login = new LoginFrame();
-		login.runLoginFrame();
+		//LoginFrame login = new LoginFrame();
+		//login.runLoginFrame();
 		
 		//Setting the Width and Height of the Screen as Class attributes
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -37,10 +38,11 @@ public class Main {
                 }
             }
         }
-		
-		StartWindow start = new StartWindow();
-		start.main(W, H);
-
+        
+        guiWindowController gui = new guiWindowController(W, H);
+        gui.toggleForwardChange();
+        gui.windowChange();
+      
 	}
 
 }
