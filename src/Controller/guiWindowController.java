@@ -21,6 +21,8 @@ public class guiWindowController {
 	private int currentWindow;
 	private int listWindowType = 0;
 	
+	private boolean flag;
+	
 	public guiWindowController(int width, int height) {
 		currentWindow = 0;
 		W = width;
@@ -38,34 +40,34 @@ public class guiWindowController {
 				case 0:
 					currentWindow = 1;
 					forwardChange = false;
-					openLoginWindow(W, H);
+					openWelcomeWindow(W, H);
 					break;
 				case 1:
 					currentWindow = 2;
 					forwardChange = false;
-					openStartWindow(W, H);
+					openLoginWindow(W, H);
 					break;
 				case 2:
 					currentWindow = 3;
 					forwardChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 3:
 					currentWindow = 4;
 					listWindowType ++;
 					forwardChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 4:
 					currentWindow = 5;
 					listWindowType ++;
 					forwardChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 5:
 					listWindowType ++;
 					forwardChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 6:
 					currentWindow = 7;
@@ -92,30 +94,30 @@ public class guiWindowController {
 				case 3:
 					currentWindow = 2;
 					backChange = false;
-					openStartWindow(W, H);
+					openLoginWindow(W, H);
 					break;
 				case 4:
 					currentWindow = 3;
 					listWindowType --;
 					backChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 5:
 					currentWindow = 4;
 					listWindowType --;
 					backChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 6:
 					currentWindow = 5;
 					listWindowType --;
 					backChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				case 7:
 					currentWindow = savedWindow;
 					backChange = false;
-					openListWindow(W, H);
+					openListWindow(W, H, this.flag);
 					break;
 				default:
 					//Resets, prints error message
@@ -144,15 +146,10 @@ public class guiWindowController {
 		
 	}
 	
-	private void openStartWindow(int width, int height) {
-
-					StartWindow start = new StartWindow(width, height, this);
-					start.getFrame().setVisible(true);
-	}
 	
-	private void openListWindow(int width, int height) {
-					ListWindow start = new ListWindow(width, height, this);
-					start.getFrame().setVisible(true);
+	private void openListWindow(int width, int height, boolean isAdmin) {
+			ListWindow start = new ListWindow(width, height, this, isAdmin);
+			start.getFrame().setVisible(true);
 		 
 	}
 	
@@ -161,6 +158,12 @@ public class guiWindowController {
 		addOrEdit = false;
 		start.getFrame().setVisible(true);
 
+	}
+	
+	private void openWelcomeWindow(int width, int height)
+	{
+		WelcomeWindow firstWindow = new WelcomeWindow(width, height, this);
+		firstWindow.getFrame().setVisible(true);
 	}
 	
 	public void toggleForwardChange() {
@@ -195,6 +198,16 @@ public class guiWindowController {
 	
 	public int getListWindowType() {
 		return listWindowType;
+	}
+	
+	public boolean getFlag()
+	{
+		return this.flag;
+	}
+	
+	public void setFlag(boolean flag)
+	{
+		this.flag = flag;
 	}
 
 }
