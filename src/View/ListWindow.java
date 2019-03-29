@@ -69,21 +69,19 @@ public class ListWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public ListWindow(int width, int height, guiWindowController gui) 
-	{
+
+	public ListWindow(int width, int height, guiWindowController gui, boolean isAdmin) {
+		// TODO Auto-generated constructor stub
 		backGUI = gui;
 		W = width;
 		H = height;
-		initialize();
+		initialize(isAdmin);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() 
+	private void initialize(boolean isAdmin) 
 	{
 		// the frame work for the window frame
 		frmListView = new JFrame();
@@ -177,6 +175,8 @@ public class ListWindow {
 		list.setBounds(W/50, H/20, (2*W)/5, (3*H)/4);
 		frmListView.getContentPane().add(list);
 		
+		if(isAdmin == true)
+		{
 		//Components for the edit/delete button to go to that screen for the selected item on the list
 		JButton btnEditdelete = new JButton("Edit/Delete");
 		btnEditdelete.addMouseListener(new MouseAdapter() {
@@ -206,6 +206,7 @@ public class ListWindow {
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		btnAdd.setBounds((5*W)/6, H/20, W/8, H/15);
 		frmListView.getContentPane().add(btnAdd);
+		}
 		
 		if(backGUI.getListWindowType() != 3) {
 			//Components of the add button to go to that screen and add a new item to the database
