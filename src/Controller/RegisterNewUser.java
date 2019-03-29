@@ -18,6 +18,7 @@ public class RegisterNewUser {
 	protected Shell shell;
 	private Text newUserName;
 	private Text newUserPassword;
+	private Text userEmail;
 
 	/**
 	 * Launch the application.
@@ -71,16 +72,31 @@ public class RegisterNewUser {
 		newUserPassword = new Text(shell, SWT.BORDER);
 		newUserPassword.setBounds(227, 121, 76, 21);
 		
+		userEmail = new Text(shell, SWT.BORDER);
+		userEmail.setBounds(227, 166, 76, 21);
+		
 		Button btnConfirm = new Button(shell, SWT.NONE);
 		btnConfirm.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				UserAuthentication newUser = new UserAuthentication();
-				newUser.register(newUserName.getText(), newUserPassword.getText());
+				boolean invalid = newUser.checkEmptyInput(newUserName.getText(), newUserPassword.getText());
+				boolean existingId = newUser.checkUsername(newUserName.getText());
+				if(invalid == true || existingId == true) {
+					if(invalid == true) {
+						JOptionPane.showMessageDialog(null, "You have entered an invalid username/password");
+					} else {
+						JOptionPane.showMessageDialog(null, "The Username you entered already exists");
+					}
+				} else {
+					newUser.register(newUserName.getText(), newUserPassword.getText(), userEmail.getText());
+					btnConfirm.setEnabled(false);
+					shell.dispose();
+				}
 				
 			}
 		});
-		btnConfirm.setBounds(88, 201, 75, 25);
+		btnConfirm.setBounds(88, 215, 75, 25);
 		btnConfirm.setText("confirm");
 		
 		Button btnCancel = new Button(shell, SWT.NONE);
@@ -90,12 +106,16 @@ public class RegisterNewUser {
 				shell.dispose();
 			}
 		});
-		btnCancel.setBounds(228, 201, 75, 25);
+		btnCancel.setBounds(228, 215, 75, 25);
 		btnCancel.setText("cancel");
 		
 		Label lblRegistrationForm = new Label(shell, SWT.NONE);
 		lblRegistrationForm.setBounds(153, 24, 99, 15);
 		lblRegistrationForm.setText("Registration Form");
+		
+		Label lblEmail = new Label(shell, SWT.NONE);
+		lblEmail.setBounds(88, 169, 32, 15);
+		lblEmail.setText("Email:");
 
 	}
 }
