@@ -21,21 +21,17 @@ import java.awt.Font;
  */
 public class WelcomeWindow {
 
+	// private instance variables for the class
 	private JFrame welcomeFrame;
-	
-	private static int windowType;
-	
 	private static int windowWidth;
-	
 	private static int windowHeight;
-	
 	private guiWindowController backGUI;
 
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(int displayType, int width, int height) {
-		windowType = displayType;
 		windowWidth = width;
 		windowHeight = height;
 		EventQueue.invokeLater(new Runnable() {
@@ -50,9 +46,7 @@ public class WelcomeWindow {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
+	// constructor for the window
 	public WelcomeWindow(int width, int height, guiWindowController gui) {
 		windowWidth = width;
 		windowHeight = height;
@@ -60,6 +54,7 @@ public class WelcomeWindow {
 		initialize();
 	}
 	
+	// getter for the frame
 	public JFrame getFrame()
 	{
 		return welcomeFrame;
@@ -75,6 +70,7 @@ public class WelcomeWindow {
 		welcomeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		welcomeFrame.getContentPane().setLayout(null);
 		
+		// button that exits the window, and program since it is the first window to appear
 		JButton exitButton = new JButton("Exit");
 		exitButton.setFont(new Font("Dubai", Font.PLAIN, 18));
 		exitButton.addMouseListener(new MouseAdapter() {
@@ -87,6 +83,8 @@ public class WelcomeWindow {
 		exitButton.setBounds(2 * windowWidth / 7, 3 * windowHeight / 4, windowWidth / 10, windowHeight / 15);
 		welcomeFrame.getContentPane().add(exitButton);
 		
+		
+		// button that when clicked it goes to the next window
 		JButton continueButton = new JButton("Continue");
 		continueButton.setFont(new Font("Dubai", Font.PLAIN, 18));
 		continueButton.addMouseListener(new MouseAdapter() {
@@ -101,11 +99,15 @@ public class WelcomeWindow {
 		continueButton.setBounds(3 * windowWidth / 5, 3 * windowHeight / 4, windowWidth / 10, windowHeight / 15);
 		welcomeFrame.getContentPane().add(continueButton);
 		
+		
+		// a welcoming message for the user
 		JLabel welcomeMessage = new JLabel("Simon Fraser University Course Managament");
 		welcomeMessage.setFont(new Font("Monotype Corsiva", Font.PLAIN, 41));
 		welcomeMessage.setBounds(windowWidth / 3, windowHeight / 25, windowWidth / 2, windowHeight / 3);
 		welcomeFrame.getContentPane().add(welcomeMessage);
 		
+		
+		// a crest for the window, nice image to have when the program runs
 		JLabel SFUCrest = new JLabel("");
 		SFUCrest.setBounds(2 * windowWidth / 5,  2 * windowHeight / 7, 360, 360);
 		java.awt.Image crest = new ImageIcon(this.getClass().getResource("/Crest.gif")).getImage();
@@ -114,3 +116,4 @@ public class WelcomeWindow {
 	}
 
 }
+
