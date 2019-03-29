@@ -216,6 +216,7 @@ public class ListWindow {
 				public void mouseClicked(MouseEvent e) {
 					backGUI.toggleForwardChange();
 					backGUI.windowChange();
+					frmListView.dispose();
 				}
 			});
 			btnExplore.setFont(new Font("Tahoma", Font.PLAIN, H/40));
