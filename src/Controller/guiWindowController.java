@@ -63,6 +63,7 @@ public class guiWindowController {
 					openListWindow(W, H);
 					break;
 				case 5:
+					currentWindow = 6;
 					listWindowType ++;
 					forwardChange = false;
 					openListWindow(W, H);

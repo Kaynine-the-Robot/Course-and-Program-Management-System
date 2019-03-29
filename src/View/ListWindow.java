@@ -182,7 +182,6 @@ public class ListWindow {
 		btnEditdelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//if(list.getSelectedIndex() == 0) { //Will have to be changed to accommodate a list of values, use index's of original list
 				backGUI.toggleAddAndEdit();	
 				backGUI.toggleForwardChange();
 				backGUI.windowChange();
