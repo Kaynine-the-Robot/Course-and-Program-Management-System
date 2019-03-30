@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,12 +20,17 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 
 import Controller.*;
+import Model.faculty;
 
 /**
  * ListWindow class
@@ -119,6 +125,32 @@ public class ListWindow {
 		frmListView.getContentPane().add(btnBack);
 		
 		//Components about the list displaying all the objects in the database
+		
+		String[] faculties = new String[faculty.getFacultySet().size()];
+		String[] departments = new String[faculty.getFacultySet().get(0).departmentSet.size()];
+		String[] programs = new String[faculty.getFacultySet().get(0).departmentSet.get(0).programSet.size()];
+		String[] courses = new String[faculty.getFacultySet().get(0).departmentSet.get(0).programSet.get(0).courseSet.size()];
+		for (int i = 0; i < faculties.length; i++) {
+			String temp1 = faculty.getFacultySet().get(i).getName();
+			temp1 = temp1.replace("_", " ");
+			faculties[i] = temp1;
+			for (int j = 0; j < departments.length; j++) {
+				String temp2 = faculty.getFacultySet().get(i).departmentSet.get(j).getName();
+				temp2 = temp2.replace("_", " ");
+				departments[j] = temp2;
+				for (int k = 0; k < programs.length; k++) {
+					String temp3 = faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).getName();
+					temp3 = temp3.replace("_", " ");
+					programs[k] = temp3;
+//					for (int l = 0; l < courses.length; l++) {
+//						String temp4 = faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).courseSet.get(l).getName();
+//						temp4 = temp4.replace("_", " ");
+//						courses[l] = temp4;
+//					}
+				}
+			}
+		}
+
 		JList list = new JList();
 		list.setBorder(BorderFactory.createLineBorder((Color.GRAY), 3));
 		list.setFont(new Font("Tahoma", Font.PLAIN, H/30));
@@ -126,48 +158,46 @@ public class ListWindow {
 		//Condition for displaying which type of objects in the list, this is for faculties
 		if(backGUI.getListWindowType() == 0) {
 			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Science"};
+
 				public int getSize() {
-					return values.length;
+					return faculties.length;
 				}
 				public Object getElementAt(int index) {
-					return values[index];
+					return faculties[index];
 				}
 			});
 		}
 		//Condition for displaying which type of objects in the list, this is for departments
 		else if(backGUI.getListWindowType() == 1) {
 			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Computer Science"};
+				
 				public int getSize() {
-					return values.length;
+					return departments.length;
 				}
 				public Object getElementAt(int index) {
-					return values[index];
+					return departments[index];
 				}
 			});
 		}
 		//Condition for displaying which type of objects in the list, this is for programs
 		else if(backGUI.getListWindowType() == 2) {
 			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Undergraduate"};
 				public int getSize() {
-					return values.length;
+					return programs.length;
 				}
 				public Object getElementAt(int index) {
-					return values[index];
+					return programs[index];
 				}
 			});
 		}
 		//Condition for displaying which type of objects in the list, this is for courses
 		else {
 			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"CPSC 101"};
 				public int getSize() {
-					return values.length;
+					return courses.length;
 				}
 				public Object getElementAt(int index) {
-					return values[index];
+					return courses[index];
 				}
 			});
 		}
