@@ -216,7 +216,7 @@ public class EditWindow {
 			comboBox_2.setBounds(W/2, (2*H)/5, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox_2);
 			
-			//Components of a label and text input bar for the ID of a course
+			/////Components of a label and text input bar for the ID of a course
 			JLabel lblId_1 = new JLabel("ID");
 			lblId_1.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			lblId_1.setBounds(W/10, (7*H)/40, W/10, H/10);
@@ -232,30 +232,48 @@ public class EditWindow {
 			textField_4.setColumns(10);
 			textField_4.setBounds(W/10, H/4, W/5, H/20);
 			frmEditView.getContentPane().add(textField_4);
+			/////////////////////////////////////////////////////////////////////
 			
-			//Components of a label and drop down menu for anti-requisites of a course
+			/////Components of a label and drop down menu for anti-requisites of a course
 			JLabel lblAntirequisites = new JLabel("Anti-Requisites");
 			lblAntirequisites.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			lblAntirequisites.setBounds(W/2, (19*H)/40, W/6, H/10);
 			frmEditView.getContentPane().add(lblAntirequisites);
 			
-			JComboBox comboBox_5 = new JComboBox();
+			program tempProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+					getDepartments().get(ListWindow.getCurrentDepartment()).
+					programSet.get(ListWindow.getCurrentProgram());
+			String[] antiReqs = new String[tempProgram.courseSet.size()];
+			for(int i = 0; i < tempProgram.courseSet.size(); i++) {
+				antiReqs[i] = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+				getDepartments().get(ListWindow.getCurrentDepartment()).
+				programSet.get(ListWindow.getCurrentProgram()).courseSet.get(i).getName().replace("_", " ");
+			}
+			JComboBox comboBox_5 = new JComboBox(antiReqs);
 			comboBox_5.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			comboBox_5.setBounds(W/2, (11*H)/20, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox_5);
+			/////////////////////////////////////////////////////////////////////
 			
-			//Components of a label and drop down menu for pre-requisites of a course
+			/////Components of a label and drop down menu for pre-requisites of a course
 			JLabel lblPrerequisites = new JLabel("Pre-Requisites");
 			lblPrerequisites.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			lblPrerequisites.setBounds(W/2, (5*H)/8, W/6, H/10);
 			frmEditView.getContentPane().add(lblPrerequisites);
 			
-			JComboBox comboBox_6 = new JComboBox();
+			String[] preReqs = new String[tempProgram.courseSet.size()];
+			for(int i = 0; i < tempProgram.courseSet.size(); i++) {
+				preReqs[i] = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+				getDepartments().get(ListWindow.getCurrentDepartment()).
+				programSet.get(ListWindow.getCurrentProgram()).courseSet.get(i).getName().replace("_", " ");
+			}
+			JComboBox comboBox_6 = new JComboBox(preReqs);
 			comboBox_6.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			comboBox_6.setBounds(W/2, (7*H)/10, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox_6);
+			/////////////////////////////////////////////////////////////////////
 			
-			//Components of a label and text input bar for the Course Description of a course
+			/////Components of a label and text input bar for the Course Description of a course
 			JLabel lblCourseDescription = new JLabel("Course Description");
 			lblCourseDescription.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			lblCourseDescription.setBounds(W/10, (19*H)/40, W/6, H/10);
@@ -266,8 +284,9 @@ public class EditWindow {
 			textField_1.setColumns(10);
 			textField_1.setBounds(W/10, (11*H)/20, W/5, H/20);
 			frmEditView.getContentPane().add(textField_1);
+			///////////////////////////////////////////////////////////////////
 			
-			//Components of a label and text input bar for any additional notes of a course
+			/////Components of a label and text input bar for any additional notes of a course
 			JLabel lblNotes = new JLabel("Notes");
 			lblNotes.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			lblNotes.setBounds(W/10, (5*H)/8, W/6, H/10);
@@ -278,6 +297,7 @@ public class EditWindow {
 			textField_8.setColumns(10);
 			textField_8.setBounds(W/10, (7*H)/10, W/5, H/20);
 			frmEditView.getContentPane().add(textField_8);
+			////////////////////////////////////////////////////////////////////
 			
 		}
 		
