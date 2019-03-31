@@ -27,13 +27,13 @@ public class Main {
 
         for(int i = 0; i < faculty.getFacultySet().size(); i++){
             System.out.println(faculty.getFacultySet().get(i).getName());
-            for(int j = 0; j < faculty.getFacultySet().get(i).departmentSet.size(); j++){
-                System.out.println("\t" + faculty.getFacultySet().get(i).departmentSet.get(j).getName());
-                for(int k = 0; k < faculty.getFacultySet().get(i).departmentSet.get(j).programSet.size(); k++){
-                    System.out.println("\t\t" + faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).getName());
-                    for(int l = 0; l < faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).courseSet.size(); l++){
-                        System.out.println("\t\t\t" + faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).courseSet.get(l).getFullName() +
-                                           " [" + faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).courseSet.get(l).getFullID() + "]");
+            for(int j = 0; j < faculty.getFacultySet().get(i).getDepartments().size(); j++){
+                System.out.println("\t" + faculty.getFacultySet().get(i).getDepartments().get(j).getName());
+                for(int k = 0; k < faculty.getFacultySet().get(i).getDepartments().get(j).programSet.size(); k++){
+                    System.out.println("\t\t" + faculty.getFacultySet().get(i).getDepartments().get(j).programSet.get(k).getName());
+                    for(int l = 0; l < faculty.getFacultySet().get(i).getDepartments().get(j).programSet.get(k).courseSet.size(); l++){
+                        System.out.println("\t\t\t" + faculty.getFacultySet().get(i).getDepartments().get(j).programSet.get(k).courseSet.get(l).getFullName() +
+                                           " [" + faculty.getFacultySet().get(i).getDepartments().get(j).programSet.get(k).courseSet.get(l).getFullID() + "]");
                     }
                 }
             }

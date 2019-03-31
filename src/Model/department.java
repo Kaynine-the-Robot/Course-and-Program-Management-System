@@ -25,15 +25,15 @@ public class department {
 			return true;
 		}
 		String nameUpper = name.toUpperCase();
-		itsfaculty.departmentSet.remove(this);
-		for (int i = 0; i < itsfaculty.departmentSet.size();i++) {
-			if(itsfaculty.departmentSet.get(i).getName().toUpperCase().equals(nameUpper)){
-				itsfaculty.departmentSet.add(this);
+		itsfaculty.getDepartments().remove(this);
+		for (int i = 0; i < itsfaculty.getDepartments().size();i++) {
+			if(itsfaculty.getDepartments().get(i).getName().toUpperCase().equals(nameUpper)){
+				itsfaculty.getDepartments().add(this);
 				return false;
 			}
 		}
 		this.name = name;
-		itsfaculty.departmentSet.add(this);
+		itsfaculty.getDepartments().add(this);
 		return true;	
 	}
 	
@@ -50,15 +50,15 @@ public class department {
 			this.ID = ID;
 			return true;
 		}
-		itsfaculty.departmentSet.remove(this);
-		for(int i = 0; i < itsfaculty.departmentSet.size();i++) {
-			if(itsfaculty.departmentSet.get(i).getID().equals(ID)) {
-				itsfaculty.departmentSet.add(this);
+		itsfaculty.getDepartments().remove(this);
+		for(int i = 0; i < itsfaculty.getDepartments().size();i++) {
+			if(itsfaculty.getDepartments().get(i).getID().equals(ID)) {
+				itsfaculty.getDepartments().add(this);
 				return false;
 			}
 		}
 		this.ID = ID;
-		itsfaculty.departmentSet.add(this);
+		itsfaculty.getDepartments().add(this);
 		return true;
 	}
 	

@@ -30,7 +30,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 
 import Controller.*;
-import Model.faculty;
+import Model.*;
 
 /**
  * ListWindow class
@@ -50,6 +50,10 @@ public class ListWindow {
 	//The Frame of ListWindow for returning to make visible
 	private JFrame frmListView;
 	private guiWindowController backGUI;
+	private static int currentFaculty;
+	private static int currentDepartment;
+	private static int currentProgram;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -126,30 +130,7 @@ public class ListWindow {
 		
 		//Components about the list displaying all the objects in the database
 		
-		String[] faculties = new String[faculty.getFacultySet().size()];
-		String[] departments = new String[faculty.getFacultySet().get(0).departmentSet.size()];
-		String[] programs = new String[faculty.getFacultySet().get(0).departmentSet.get(0).programSet.size()];
-		String[] courses = new String[faculty.getFacultySet().get(0).departmentSet.get(0).programSet.get(0).courseSet.size()];
-		for (int i = 0; i < faculties.length; i++) {
-			String temp1 = faculty.getFacultySet().get(i).getName();
-			temp1 = temp1.replace("_", " ");
-			faculties[i] = temp1;
-			for (int j = 0; j < departments.length; j++) {
-				String temp2 = faculty.getFacultySet().get(i).departmentSet.get(j).getName();
-				temp2 = temp2.replace("_", " ");
-				departments[j] = temp2;
-				for (int k = 0; k < programs.length; k++) {
-					String temp3 = faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).getName();
-					temp3 = temp3.replace("_", " ");
-					programs[k] = temp3;
-//					for (int l = 0; l < courses.length; l++) {
-//						String temp4 = faculty.getFacultySet().get(i).departmentSet.get(j).programSet.get(k).courseSet.get(l).getName();
-//						temp4 = temp4.replace("_", " ");
-//						courses[l] = temp4;
-//					}
-				}
-			}
-		}
+		
 
 		JList list = new JList();
 		list.setBorder(BorderFactory.createLineBorder((Color.GRAY), 3));
@@ -157,49 +138,38 @@ public class ListWindow {
 		
 		//Condition for displaying which type of objects in the list, this is for faculties
 		if(backGUI.getListWindowType() == 0) {
-			list.setModel(new AbstractListModel() {
-
-				public int getSize() {
-					return faculties.length;
-				}
-				public Object getElementAt(int index) {
-					return faculties[index];
-				}
-			});
+			DefaultListModel listModel = new DefaultListModel();
+			for(int i = 0; i < faculty.getFacultySet().size(); i++) {
+				listModel.addElement(faculty.getFacultySet().get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for departments
 		else if(backGUI.getListWindowType() == 1) {
-			list.setModel(new AbstractListModel() {
-				
-				public int getSize() {
-					return departments.length;
-				}
-				public Object getElementAt(int index) {
-					return departments[index];
-				}
-			});
+			DefaultListModel listModel = new DefaultListModel();
+			faculty selectedFaculty = faculty.getFacultySet().get(currentFaculty);
+			for(int i = 0; i < selectedFaculty.getDepartments().size(); i++) {
+				listModel.addElement(selectedFaculty.getDepartments().get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for programs
 		else if(backGUI.getListWindowType() == 2) {
-			list.setModel(new AbstractListModel() {
-				public int getSize() {
-					return programs.length;
-				}
-				public Object getElementAt(int index) {
-					return programs[index];
-				}
-			});
+			DefaultListModel listModel = new DefaultListModel();
+			department selectedDepartment = faculty.getFacultySet().get(currentFaculty).getDepartments().get(currentDepartment);
+			for(int i = 0; i < selectedDepartment.programSet.size(); i++) {
+				listModel.addElement(selectedDepartment.programSet.get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for courses
 		else {
-			list.setModel(new AbstractListModel() {
-				public int getSize() {
-					return courses.length;
-				}
-				public Object getElementAt(int index) {
-					return courses[index];
-				}
-			});
+			DefaultListModel listModel = new DefaultListModel();
+			program selectedProgram = faculty.getFacultySet().get(currentFaculty).getDepartments().get(currentDepartment).programSet.get(currentProgram);
+			for(int i = 0; i < selectedProgram.courseSet.size(); i++) {
+				listModel.addElement(selectedProgram.courseSet.get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		
 		list.setBounds(W/50, H/20, (2*W)/5, (3*H)/4);
@@ -244,6 +214,11 @@ public class ListWindow {
 			btnExplore.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					switch(backGUI.getListWindowType()) {
+					case 0: currentFaculty = list.getSelectedIndex();
+					case 1: currentDepartment = list.getSelectedIndex();
+					case 2: currentProgram = list.getSelectedIndex();
+					}
 					backGUI.toggleForwardChange();
 					backGUI.windowChange();
 					frmListView.dispose();

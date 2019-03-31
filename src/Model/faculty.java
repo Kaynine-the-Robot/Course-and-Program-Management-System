@@ -7,7 +7,7 @@ public class faculty {
   private static ArrayList<faculty> facultySet = new ArrayList<faculty>();
   private String name;
   private String ID;
-  public ArrayList<department> departmentSet = new ArrayList<department>();
+  private ArrayList<department> departmentSet = new ArrayList<department>();
   
   public faculty() {
 	  facultySet.add(this);
@@ -67,5 +67,9 @@ public class faculty {
   
   public void removeFaculty() {
 	  facultySet.remove(this);
+  }
+  
+  public ArrayList<department> getDepartments(){
+	  return departmentSet;
   }
 }
