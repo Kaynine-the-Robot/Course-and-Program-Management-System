@@ -93,5 +93,10 @@ public class course {
 		return this.itsprogram.itsdepartment.itsfaculty.getID()+this.itsprogram.itsdepartment.getID()+this.itsprogram.getID()+this.getID();
 	}
 	
+	public String getFullLine(){
+		return "\t\t\t- " + name + " " + courseNum + " " + ID;
+	    }
+
+	
 	
 }

@@ -70,4 +70,9 @@ public class program {
 	public String getName() {
 		return this.name;
 	}
+	
+	public String getFullLine(){
+		return "\t\t+ " + name + " " + ID;
+	    }
+
 }

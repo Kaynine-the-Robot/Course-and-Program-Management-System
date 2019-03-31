@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import Controller.guiWindowController;
+import Model.*;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
@@ -136,7 +138,12 @@ public class EditWindow {
 		lblName.setBounds(W/10, H/40, W/10, H/10);
 		frmEditView.getContentPane().add(lblName);
 		
-		textField = new JTextField();
+		if(addOrEdit) {
+			textField = new JTextField();
+		}
+		else {
+			textField = new JTextField(getName());
+		}
 		textField.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		textField.setColumns(10);
 		textField.setBounds(W/10, H/10, W/5, H/20);
@@ -153,9 +160,13 @@ public class EditWindow {
 			lblId.setBounds(W/2, H/40, W/10, H/10);
 			frmEditView.getContentPane().add(lblId);
 			
-			JComboBox comboBox = new JComboBox();
+			String[] faculties = new String[faculty.getFacultySet().size()];
+			for(int i = 0; i < faculty.getFacultySet().size(); i++) {
+				faculties[i] = faculty.getFacultySet().get(i).getName().replace("_", " ");
+			}
+			JComboBox comboBox = new JComboBox(faculties);
 			comboBox.setFont(new Font("Tahoma", Font.PLAIN, H/40));
-			comboBox.setModel(new DefaultComboBoxModel(new String[] {"Science"}));
+			//comboBox.setModel(new DefaultComboBoxModel()); This is uneeded
 			comboBox.setBounds(W/2, H/10, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox);
 			
@@ -170,9 +181,14 @@ public class EditWindow {
 			lblDepartment.setBounds(W/2, (7*H)/40, W/10, H/10);
 			frmEditView.getContentPane().add(lblDepartment);
 			
-			JComboBox comboBox_1 = new JComboBox();
+			faculty tempFaculty = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
+			String[] departments = new String[tempFaculty.getDepartments().size()];
+			for(int i = 0; i < tempFaculty.getDepartments().size(); i++) {
+				departments[i] = tempFaculty.getDepartments().get(i).getName().replace("_", " ");
+			}
+			JComboBox comboBox_1 = new JComboBox(departments);
 			comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, H/40));
-			comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Computer Science"}));
+			//comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"Computer Science"}));
 			comboBox_1.setBounds(W/2, H/4, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox_1);
 			
@@ -188,9 +204,15 @@ public class EditWindow {
 			lblProgram.setBounds(W/2, (13*H)/40, W/10, H/10);
 			frmEditView.getContentPane().add(lblProgram);
 			
-			JComboBox comboBox_2 = new JComboBox();
+			department tempDepartments = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+					getDepartments().get(ListWindow.getCurrentDepartment());
+			String[] departments = new String[tempDepartments.programSet.size()];
+			for(int i = 0; i < tempDepartments.programSet.size(); i++) {
+				departments[i] = tempDepartments.programSet.get(i).getName().replace("_", " ");
+			}
+			JComboBox comboBox_2 = new JComboBox(departments);
 			comboBox_2.setFont(new Font("Tahoma", Font.PLAIN, H/40));
-			comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Undergraduate", "Masters", "PhD", "Industry Specialized Masters", "Continuing Education", "Block Week Classes", "Deep Learning"}));
+			//comboBox_2.setModel(new DefaultComboBoxModel(new String[] {"Undergraduate", "Masters", "PhD", "Industry Specialized Masters", "Continuing Education", "Block Week Classes", "Deep Learning"}));
 			comboBox_2.setBounds(W/2, (2*H)/5, W/5, H/20);
 			frmEditView.getContentPane().add(comboBox_2);
 			
@@ -200,7 +222,12 @@ public class EditWindow {
 			lblId_1.setBounds(W/10, (7*H)/40, W/10, H/10);
 			frmEditView.getContentPane().add(lblId_1);
 			
-			textField_4 = new JTextField();
+			if(addOrEdit) {
+				textField_4 = new JTextField();
+			}
+			else {
+				textField_4 = new JTextField(getID());
+			}
 			textField_4.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			textField_4.setColumns(10);
 			textField_4.setBounds(W/10, H/4, W/5, H/20);
@@ -282,5 +309,35 @@ public class EditWindow {
 	
 	public JFrame getFrame() {
 		return frmEditView;
+	}
+	
+	private String getName() {
+		//Retrieving the selected Faculty, Department, Program, or Course
+		if(windowType == 0) {
+			return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).getName().replace("_", " ");
+		}
+		else if(windowType == 1) {
+			return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).getName().replace("_", " ");
+		}
+		else if(windowType == 2) {
+			return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).
+			programSet.get(ListWindow.getCurrentProgram()).getName().replace("_", " ");
+		}
+		else {
+			return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).
+			programSet.get(ListWindow.getCurrentProgram()).
+			courseSet.get(ListWindow.getCurrentCourse()).getName().replace("_", " ");
+		}
+	}
+	
+	private String getID() {
+		//Retrieving the selected Faculty, Department, Program, or Course
+		return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+		getDepartments().get(ListWindow.getCurrentDepartment()).
+		programSet.get(ListWindow.getCurrentProgram()).
+		courseSet.get(ListWindow.getCurrentCourse()).getID();
 	}
 }

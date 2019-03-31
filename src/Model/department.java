@@ -69,4 +69,9 @@ public class department {
 	public String getName() {
 		return this.name;
 	}
+	
+	public String getFullLine(){
+		return "\t= " + name + " " + ID;
+	    }
+
 }

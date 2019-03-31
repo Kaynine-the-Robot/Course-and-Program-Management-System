@@ -1,13 +1,15 @@
 package Controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-
-import Model.*;
-
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.IOException;
+
+import Model.*;
 
 public class database{
 
@@ -75,5 +77,133 @@ public class database{
         } catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void write(String textFile, faculty faculty){
+        File file = new File(textFile);
+		FileWriter fWriter = null;
+		BufferedWriter bWriter = null;
+		try{
+		    fWriter = new FileWriter(file, true);
+		    bWriter = new BufferedWriter(fWriter);
+		    bWriter.write("\n> " + faculty.getName() + " " + faculty.getID());
+		} catch(IOException e){
+		    e.printStackTrace();
+		} finally{
+		    try{
+			bWriter.close();
+			fWriter.close();
+		    } catch(IOException e){
+			e.printStackTrace();
+		    }
+		}
+    }
+
+    public void write(String textFile, department department){
+		faculty itsFaculty = department.itsfaculty;
+	
+		PrintWriter writer = null;
+		BufferedReader bReader = null;
+		FileReader fReader = null;
+		try{
+		    writer = new PrintWriter(new BufferedWriter(new FileWriter("Database.temp")));
+		    fReader = new FileReader(textFile);
+		    bReader = new BufferedReader(fReader);
+		    String line;
+		    while((line = bReader.readLine()) != null){
+			if(itsFaculty.getFullLine().equals(line)){
+			    writer.println(line);
+			    writer.println("\n\t= " + department.getName() + " " + department.getID());
+			}
+			else{
+			    writer.println(line);
+			}
+		    }
+		} catch(IOException e){
+		    e.printStackTrace();
+		} finally{
+		    try{
+			fReader.close();
+			writer.close();
+	
+			File realName = new File(textFile);
+			realName.delete();
+			new File("Database.temp").renameTo(realName);
+		    } catch(IOException e){
+			e.printStackTrace();
+		    }
+		}
+    }
+
+    public void write(String textFile, program program){
+		department itsDepartment = program.itsdepartment;
+	
+		PrintWriter writer = null;
+		BufferedReader bReader = null;
+		FileReader fReader = null;
+		try{
+		    writer = new PrintWriter(new BufferedWriter(new FileWriter("Database.temp")));
+		    fReader = new FileReader(textFile);
+		    bReader = new BufferedReader(fReader);
+		    String line;
+		    while((line = bReader.readLine()) != null){
+			if(itsDepartment.getFullLine().equals(line)){
+			    writer.println(line);
+			    writer.println("\n\t\t+ " + program.getName() + " " + program.getID());
+			}
+			else{
+			    writer.println(line);
+			}
+		    }
+		} catch(IOException e){
+		    e.printStackTrace();
+		} finally{
+		    try{
+			fReader.close();
+			writer.close();
+	
+			File realName = new File(textFile);
+			realName.delete();
+			new File("Database.temp").renameTo(realName);
+		    } catch(IOException e){
+			e.printStackTrace();
+		    }
+		}
+    }
+    
+    public void write(String textFile, course course){
+		program itsProgram = course.itsprogram;
+	
+		PrintWriter writer = null;
+		BufferedReader bReader = null;
+		FileReader fReader = null;
+		try{
+		    writer = new PrintWriter(new BufferedWriter(new FileWriter("Database.temp")));
+		    fReader = new FileReader(textFile);
+		    bReader = new BufferedReader(fReader);
+		    String line;
+		    while((line = bReader.readLine()) != null){
+			if(itsProgram.getFullLine().equals(line)){
+			    writer.println(line);
+			    writer.println("\n\t\t\t- " + course.getFullName() + " " + course.getID());
+			}
+			else{
+			    writer.println(line);
+			}
+		    }
+		} catch(IOException e){
+		    e.printStackTrace();
+		} finally{
+		    try{
+			fReader.close();
+			writer.close();
+	
+			File realName = new File(textFile);
+			realName.delete();
+			new File("Database.temp").renameTo(realName);
+		    } catch(IOException e){
+			e.printStackTrace();
+		    }
+		}
     }
 }

@@ -155,7 +155,7 @@ public class guiWindowController {
 	}
 	
 	private void openEditWindow(int width, int height) {
-		EditWindow start = new EditWindow(width, height, this, currentWindow - 4, addOrEdit);
+		EditWindow start = new EditWindow(width, height, this, savedWindow - 3, addOrEdit);
 		addOrEdit = false;
 		start.getFrame().setVisible(true);
 

@@ -50,9 +50,10 @@ public class ListWindow {
 	//The Frame of ListWindow for returning to make visible
 	private JFrame frmListView;
 	private guiWindowController backGUI;
-	private static int currentFaculty;
-	private static int currentDepartment;
-	private static int currentProgram;
+	private static int currentFaculty = -1;
+	private static int currentDepartment = -1;
+	private static int currentProgram = -1;
+	private static int currentCourse = -1;
 	
 	/**
 	 * Launch the application.
@@ -119,6 +120,20 @@ public class ListWindow {
 		btnBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				//These conditions are for knowing which depth the list window is in, and when back is pressed
+				//resets the value back to -1, which is useful for telling what window is on
+				if(currentCourse != -1) {
+					currentCourse = -1;
+				}
+				else if(currentProgram != -1) {
+					currentProgram = -1;
+				}
+				else if(currentDepartment != -1) {
+					currentDepartment = -1;
+				}
+				else if(currentFaculty != -1) {
+					currentFaculty = -1;
+				}
 				frmListView.dispose();
 				backGUI.toggleBackChange();
 				backGUI.windowChange();
@@ -182,6 +197,7 @@ public class ListWindow {
 		btnEditdelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				updateCurrentCourse(list);
 				backGUI.toggleAddAndEdit();	
 				backGUI.toggleForwardChange();
 				backGUI.windowChange();
@@ -196,6 +212,7 @@ public class ListWindow {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				updateCurrentCourse(list);
 				backGUI.toggleAddAndEdit();
 				backGUI.toggleAddOrEdit();
 				backGUI.toggleForwardChange();
@@ -207,21 +224,20 @@ public class ListWindow {
 		btnAdd.setBounds((5*W)/6, H/20, W/8, H/15);
 		frmListView.getContentPane().add(btnAdd);
 		}
-		
+	
 		if(backGUI.getListWindowType() != 3) {
 			//Components of the add button to go to that screen and add a new item to the database
 			JButton btnExplore = new JButton("Explore");
 			btnExplore.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					switch(backGUI.getListWindowType()) {
-					case 0: currentFaculty = list.getSelectedIndex();
-					case 1: currentDepartment = list.getSelectedIndex();
-					case 2: currentProgram = list.getSelectedIndex();
-					}
+					if(list.getSelectedIndex() != -1) {
+					updateCurrentCourse(list);
 					backGUI.toggleForwardChange();
 					backGUI.windowChange();
 					frmListView.dispose();
+					}
+					
 				}
 			});
 			btnExplore.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -234,4 +250,28 @@ public class ListWindow {
 		return frmListView;
 	}
 	
+	public static int getCurrentFaculty() {
+		return currentFaculty;
+	}
+	
+	public static int getCurrentDepartment() {
+		return currentDepartment;
+	}
+	
+	public static int getCurrentProgram() {
+		return currentProgram;
+	}
+	
+	public static int getCurrentCourse() {
+		return currentCourse;
+	}
+	
+	private void updateCurrentCourse(JList list) {
+		switch(backGUI.getListWindowType()) {
+		case 0: currentFaculty = list.getSelectedIndex();
+		case 1: currentDepartment = list.getSelectedIndex();
+		case 2: currentProgram = list.getSelectedIndex();
+		case 3: currentCourse = list.getSelectedIndex();
+		}
+	}
 }

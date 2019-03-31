@@ -72,4 +72,9 @@ public class faculty {
   public ArrayList<department> getDepartments(){
 	  return departmentSet;
   }
+  
+  public String getFullLine(){
+		return "> " + name + " " + ID;
+	    }
+
 }
