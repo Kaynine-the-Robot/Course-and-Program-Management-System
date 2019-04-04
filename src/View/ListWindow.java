@@ -201,6 +201,7 @@ public class ListWindow {
 				backGUI.toggleAddAndEdit();	
 				backGUI.toggleForwardChange();
 				backGUI.windowChange();
+				frmListView.dispose();
 			}
 		});
 		btnEditdelete.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -217,6 +218,7 @@ public class ListWindow {
 				backGUI.toggleAddOrEdit();
 				backGUI.toggleForwardChange();
 				backGUI.windowChange();
+				frmListView.dispose();
 				
 			}
 		});

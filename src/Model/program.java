@@ -41,19 +41,19 @@ public class program {
 		if (ID.length()!=2) {
 			return false;
 		}
-		int intID;
-		try {
-			intID = Integer.parseInt(ID);
-		}catch(Exception e) {
-			return false;
-		}
+		//int intID;
+		//try {
+		//	intID = Integer.parseInt(ID);
+		//}catch(Exception e) {
+		//	return false;
+		//}
 		if (itsdepartment == null) {
 			this.ID = ID;
 			return true;
 		}
 		itsdepartment.programSet.remove(this);
 		for(int i = 0; i < itsdepartment.programSet.size();i++) {
-			if(itsdepartment.programSet.get(i).getID()==intID) {
+			if(itsdepartment.programSet.get(i).getID()== ID) {
 				itsdepartment.programSet.add(this);
 				return false;
 			}
@@ -63,8 +63,9 @@ public class program {
 		return true;
 	}
 	
-	public int getID() {
-		return Integer.parseInt(this.ID);
+	public String getID() {
+		return this.ID;
+		//return Integer.parseInt(this.ID);
 	}
 	
 	public String getName() {

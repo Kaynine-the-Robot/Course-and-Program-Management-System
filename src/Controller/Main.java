@@ -6,6 +6,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
 
+import javax.xml.soap.Text;
+
 import View.*;
 import Model.*;
 
@@ -24,6 +26,7 @@ public class Main {
 		database database = new database();
 		
         database.read("src/Model/database.txt");
+        		
 
         for(int i = 0; i < faculty.getFacultySet().size(); i++){
             System.out.println(faculty.getFacultySet().get(i).getName());

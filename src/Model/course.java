@@ -86,10 +86,19 @@ public class course {
 	}
 	
 	public String getFullName() {
-		return name+courseNum;
+		return name+ " " + courseNum;
 	}
 	
 	public String getFullID() {
+		//System.out.println(this.itsprogram.getID());
+		//System.out.println(this.itsprogram.itsdepartment.itsfaculty.getDepartments().size());
+		for(int i = 0; i < this.itsprogram.itsdepartment.itsfaculty.getDepartments().size(); i ++) {
+			//System.out.println(this.itsprogram.itsdepartment.getName());
+			//System.out.println(this.itsprogram.itsdepartment.getID());
+			
+		}
+		//System.out.println(this.itsprogram.itsdepartment.getID());
+		//System.out.println(this.itsprogram.itsdepartment.itsfaculty.getID());
 		return this.itsprogram.itsdepartment.itsfaculty.getID()+this.itsprogram.itsdepartment.getID()+this.itsprogram.getID()+this.getID();
 	}
 	

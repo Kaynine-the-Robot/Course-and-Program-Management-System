@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 public class WarningMessage {
 	
 	private JFrame frame;
+	
 
 	/**
 	 * constructor for a WarningMessage window
@@ -50,7 +51,7 @@ public class WarningMessage {
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
-				frame.setVisible(false);				// having trouble disposing the window so for now it is just being set to invisible
+				frame.dispose();				// having trouble disposing the window so for now it is just being set to invisible
 				//remove or edit the object
 			}
 		});
@@ -68,7 +69,7 @@ public class WarningMessage {
 			@Override
 			public void mouseClicked(MouseEvent arg0) 
 			{
-				frame.setVisible(false);			// having trouble disposing the window so for now it is just being set to invisible
+				frame.dispose();			// having trouble disposing the window so for now it is just being set to invisible
 			}
 		});
 		noButton.setFont(new Font("Dialog", Font.PLAIN, 16));

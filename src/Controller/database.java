@@ -79,14 +79,14 @@ public class database{
         }
     }
 
-    public void write(String textFile, faculty faculty){
+    public static void write(String textFile, faculty newFaculty){
         File file = new File(textFile);
 		FileWriter fWriter = null;
 		BufferedWriter bWriter = null;
 		try{
 		    fWriter = new FileWriter(file, true);
 		    bWriter = new BufferedWriter(fWriter);
-		    bWriter.write("\n> " + faculty.getName() + " " + faculty.getID());
+		    bWriter.write("\n> " + newFaculty.getName() + " " + newFaculty.getID());
 		} catch(IOException e){
 		    e.printStackTrace();
 		} finally{
@@ -99,7 +99,7 @@ public class database{
 		}
     }
 
-    public void write(String textFile, department department){
+    public static void write(String textFile, department department){
 		faculty itsFaculty = department.itsfaculty;
 	
 		PrintWriter writer = null;
@@ -135,7 +135,7 @@ public class database{
 		}
     }
 
-    public void write(String textFile, program program){
+    public static void write(String textFile, program program){
 		department itsDepartment = program.itsdepartment;
 	
 		PrintWriter writer = null;
@@ -171,7 +171,7 @@ public class database{
 		}
     }
     
-    public void write(String textFile, course course){
+    public static void write(String textFile, course course){
 		program itsProgram = course.itsprogram;
 	
 		PrintWriter writer = null;

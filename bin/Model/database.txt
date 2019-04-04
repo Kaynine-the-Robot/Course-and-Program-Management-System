@@ -37,6 +37,8 @@
             - Special_Topics_in_Computer_Science 601 00
             - Information_Storage_and_Processing_in_Biological_Systems 605 01
             - Biological_Computation 607 02
+            
+        + Block_Week_Program 02
 
     = Chemistry 01
     
@@ -50,6 +52,8 @@
     
             - Electrochemical_Fundamentals_and_Methodologies 613 00
             - Analytical_Separations 615 01
+            
+		+ Deep_Learning_Program 02
 
 # Indenting isn't required, but I think it makes the document look nicer :)
 # The parser also ignores blank lines so you can fill the doc with however many you like!
@@ -70,9 +74,11 @@
 
             - Studies_in_Modern_Drama_I 647 00
             - Studies_in_Modern_Drama_II 649 01
+            
+        + Industry_Focused_Masters_Program 02
 
     = Anthropology 01
-
+		
         + Undergraduate_Program 00
 
             - Human_Evolution 309 00
@@ -81,3 +87,7 @@
         + Graduate_Program 01
 
             - Current_Issues_in_Methodology_in_Primatology 613 00
+        
+        + Continuing_Education_Program 02
+            
+
