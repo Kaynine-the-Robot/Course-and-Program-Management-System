@@ -187,6 +187,7 @@ public class EditWindow {
 			}
 			facultyBox.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			facultyBox.setBounds(W/2, H/10, W/5, H/20);
+			facultyBox.setSelectedItem(faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).getName().replace("_",  " "));
 			frmEditView.getContentPane().add(facultyBox); //Sixth component added to window, index 5
 			pastSelectedFacultyBox = facultyBox.getSelectedItem().toString();
 			
