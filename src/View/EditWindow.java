@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Controller.database;
@@ -58,9 +59,9 @@ public class EditWindow {
 	private guiWindowController backGUI;
 	
 	private JTextField textField_4;
-	private JTextField textField_8;
+	private JTextArea textField_8;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JTextArea textField_1;
 	/**
 	 * Launch the application.
 	 */
@@ -235,6 +236,7 @@ public class EditWindow {
 			}
 			departmentBox.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			departmentBox.setBounds(W/2, H/4, W/5, H/20);
+			departmentBox.setSelectedItem(tempFaculty.getDepartments().get(ListWindow.getCurrentDepartment()).getName().replace("_",  " "));
 			frmEditView.getContentPane().add(departmentBox); //Eighth component added to window, index 7
 			pastSelectedDepartmentBox = departmentBox.getSelectedItem().toString();
 			
@@ -276,13 +278,14 @@ public class EditWindow {
 			lblProgram.setBounds(W/2, (13*H)/40, W/10, H/10);
 			frmEditView.getContentPane().add(lblProgram); //Ninth component added to window, index 8
 			
-			department tempDepartments = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			department tempDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
 					getDepartments().get(ListWindow.getCurrentDepartment());
-			for(int i = 0; i < tempDepartments.programSet.size(); i++) {
-				programBox.addItem(tempDepartments.programSet.get(i).getName().replace("_", " "));
+			for(int i = 0; i < tempDepartment.programSet.size(); i++) {
+				programBox.addItem(tempDepartment.programSet.get(i).getName().replace("_", " "));
 			}
 			programBox.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			programBox.setBounds(W/2, (2*H)/5, W/5, H/20);
+			programBox.setSelectedItem(tempDepartment.programSet.get(ListWindow.getCurrentProgram()).getName().replace("_",  " "));
 			frmEditView.getContentPane().add(programBox); //Tenth component added to window, index 9
 			//////////////////////////////////////////////////////////////////////////
 			
@@ -342,26 +345,28 @@ public class EditWindow {
 			/////Components of a label and text input bar for the Course Description of a course
 			JLabel lblCourseDescription = new JLabel("Course Description");
 			lblCourseDescription.setFont(new Font("Tahoma", Font.PLAIN, H/40));
-			lblCourseDescription.setBounds(W/10, (19*H)/40, W/6, H/10);
+			lblCourseDescription.setBounds(W/10, (13*H)/40, W/6, H/10);
 			frmEditView.getContentPane().add(lblCourseDescription); //Seventeenth component added to window, index 16
 			
-			textField_1 = new JTextField();
+			textField_1 = new JTextArea();
 			textField_1.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			textField_1.setColumns(10);
-			textField_1.setBounds(W/10, (11*H)/20, W/5, H/20);
+			textField_1.setBounds(W/10, (8*H)/20, W/3, H/8);
+			textField_1.setLineWrap(true);
 			frmEditView.getContentPane().add(textField_1); //Eighteenth component added to window, index 17
 			///////////////////////////////////////////////////////////////////
 			
 			/////Components of a label and text input bar for any additional notes of a course
 			JLabel lblNotes = new JLabel("Notes");
 			lblNotes.setFont(new Font("Tahoma", Font.PLAIN, H/40));
-			lblNotes.setBounds(W/10, (5*H)/8, W/6, H/10);
+			lblNotes.setBounds(W/10, (21*H)/40, W/6, H/10);
 			frmEditView.getContentPane().add(lblNotes); //Nineteenth component added to window, index 18
 			
-			textField_8 = new JTextField();
+			textField_8 = new JTextArea();
 			textField_8.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			textField_8.setColumns(10);
-			textField_8.setBounds(W/10, (7*H)/10, W/5, H/20);
+			textField_8.setBounds(W/10, (12*H)/20, W/3, H/8);
+			textField_8.setLineWrap(true);
 			frmEditView.getContentPane().add(textField_8); //Twentieth component added to window, index 19
 			////////////////////////////////////////////////////////////////////
 			
@@ -379,93 +384,9 @@ public class EditWindow {
 			btnAdd.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					String name = "";
-					String ID = "";
-					String courseDescription = "";
-					String notes = "";
-					//This section retrieves any text in the text boxes on the edit screen
-					Component[] components = frmEditView.getContentPane().getComponents();
-					for(int i = 0; i < components.length; i++) {
-						if(components[i].getAccessibleContext().getAccessibleEditableText() != null) {
-							components[i].getAccessibleContext().getAccessibleEditableText().selectText(0, 100);
-							if(components[i].getAccessibleContext().getAccessibleEditableText().getCharCount() > 0) {
-								switch(i) {
-								case 3: 
-									name = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText();	
-									break;
-								case 11: 
-									ID = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText(); 
-									break;
-								case 17: 
-									courseDescription = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText(); 
-									break;
-								case 19: 
-									notes = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText();
-									break;
-								}
-							}
-						}
-					}
-					
-					//This section retrieves any selected item in the drop down menus
-					switch(windowType) {
-					case 0: 
-							faculty dataSendFaculty = new faculty();
-							dataSendFaculty.setName(name.replace(" ", "_"));
-							if(faculty.getFacultySet().size() < 10) {
-								dataSendFaculty.setID("0" + String.valueOf(faculty.getFacultySet().size()));
-							}
-							else {
-								dataSendFaculty.setID(String.valueOf(faculty.getFacultySet().size()));
-							}
-							database.write("src/Model/database.txt", dataSendFaculty);
-							break;
-					case 1: department dataSendDepartment = new department();
-							faculty departmentSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
-							dataSendDepartment.setName(name.replace(" ", "_"));
-							if(departmentSelectedFaculty.getDepartments().size() < 10) {
-								dataSendDepartment.setID("0" + String.valueOf(faculty.getFacultySet().size()));
-							}
-							else {
-								dataSendDepartment.setID(String.valueOf(faculty.getFacultySet().size()));
-							}
-							dataSendDepartment.setFaculty(departmentSelectedFaculty);
-							database.write("src/Model/database.txt", dataSendDepartment);
-							break;
-					
-					case 2: program dataSendProgram = new program();
-							faculty programSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
-							department programSelectedDepartment = programSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
-							dataSendProgram.setName(name.replace(" ", "_"));
-							if(programSelectedDepartment.programSet.size() < 10) {
-								dataSendProgram.setID("0" + String.valueOf(faculty.getFacultySet().size()));
-							}
-							else {
-								dataSendProgram.setID(String.valueOf(faculty.getFacultySet().size()));
-							}
-							dataSendProgram.setDepartment(programSelectedDepartment);
-							database.write("src/Model/database.txt", dataSendProgram);
-							break;
-						
-					case 3: course dataSendCourse = new course();
-							faculty courseSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
-							department courseSelectedDepartment = courseSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
-							program courseSelectedProgram = courseSelectedDepartment.getProgram(programBox.getSelectedItem().toString().replace(" ", "_"));
-							if(courseSelectedProgram.courseSet.size() < 10) {
-								dataSendCourse.setID("0" + String.valueOf(faculty.getFacultySet().size()));
-							}
-							else {
-								dataSendCourse.setID(String.valueOf(faculty.getFacultySet().size()));
-							}
-							dataSendCourse.setName(name.replace(" ", "_"), "101"); // This will need to be deleted when the ID is fixed being the same as name part 2
-							dataSendCourse.setProgram(courseSelectedProgram);
-							database.write("src/Model/database.txt", dataSendCourse);
-							System.out.println(antiReqBox.getSelectedItem());
-							System.out.println(preReqBox.getSelectedItem());
-							break;
-					default: System.out.println("The windowType value was an invalid value"); break;
-					}
+					addButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
 				}
+				
 			});
 			
 		} 
@@ -476,6 +397,14 @@ public class EditWindow {
 			btnChange.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			btnChange.setBounds((19*W)/50, H - (H/6), W/10, H/15);
 			frmEditView.getContentPane().add(btnChange); //Twenty-second component added to window, index 21
+			btnChange.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					editButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+				}
+				
+			});
+			
 			
 			//Components for the delete button, which will delete an objects data in the database
 			JButton btnDelete = new JButton("Delete");
@@ -483,6 +412,141 @@ public class EditWindow {
 			btnDelete.setBounds((14*W)/25, H - (H/6), W/10, H/15);
 			frmEditView.getContentPane().add(btnDelete); //Twenty-third component added to window, index 22
 		}
+	}
+	
+	 /*
+	  * This method is for adding an entry to the database for when add or edit buttons are pressed. 
+	  */
+	private void addButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
+		//Gets any text written in text boxes on GUI
+		String[] textBoxes = getTextBoxes();
+		
+		// This section retrieves any selected item in the drop down menus, then takes the strings
+		// loaded in the previous function to write the newly made faculty, department... to the
+		// database.
+		switch(windowType) {
+		case 0: 
+				faculty dataSendFaculty = new faculty();
+				dataSendFaculty.setName(textBoxes[0].replace(" ", "_"));
+				if(faculty.getFacultySet().size() < 10) {
+					dataSendFaculty.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+				}
+				else {
+					dataSendFaculty.setID(String.valueOf(faculty.getFacultySet().size()));
+				}
+				database.write("src/Model/database.txt", dataSendFaculty);
+				break;
+		case 1: department dataSendDepartment = new department();
+				faculty departmentSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
+				dataSendDepartment.setName(textBoxes[0].replace(" ", "_"));
+				if(departmentSelectedFaculty.getDepartments().size() < 10) {
+					dataSendDepartment.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+				}
+				else {
+					dataSendDepartment.setID(String.valueOf(faculty.getFacultySet().size()));
+				}
+				dataSendDepartment.setFaculty(departmentSelectedFaculty);
+				database.write("src/Model/database.txt", dataSendDepartment);
+				break;
+		
+		case 2: program dataSendProgram = new program();
+				faculty programSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
+				department programSelectedDepartment = programSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
+				dataSendProgram.setName(textBoxes[0].replace(" ", "_"));
+				if(programSelectedDepartment.programSet.size() < 10) {
+					dataSendProgram.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+				}
+				else {
+					dataSendProgram.setID(String.valueOf(faculty.getFacultySet().size()));
+				}
+				dataSendProgram.setDepartment(programSelectedDepartment);
+				database.write("src/Model/database.txt", dataSendProgram);
+				break;
+			
+		case 3: course dataSendCourse = new course();
+				faculty courseSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
+				department courseSelectedDepartment = courseSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
+				program courseSelectedProgram = courseSelectedDepartment.getProgram(programBox.getSelectedItem().toString().replace(" ", "_"));
+				if(courseSelectedProgram.courseSet.size() < 10) {
+					dataSendCourse.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+				}
+				else {
+					dataSendCourse.setID(String.valueOf(faculty.getFacultySet().size()));
+				}
+				dataSendCourse.setName(textBoxes[0].replace(" ", "_"), "101"); // This will need to be deleted when the ID is fixed being the same as name part 2
+				dataSendCourse.setProgram(courseSelectedProgram);
+				database.write("src/Model/database.txt", dataSendCourse);
+				System.out.println(antiReqBox.getSelectedItem());
+				System.out.println(preReqBox.getSelectedItem());
+				break;
+		default: System.out.println("The windowType value was an invalid value"); break;
+		}
+	}
+	
+	private void editButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
+		//Gets any text written in text boxes on GUI
+		String[] textBoxes = getTextBoxes();
+		switch(windowType) {
+		case 0:
+			faculty currentFaculty = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
+			currentFaculty.setName(textBoxes[0]);
+			currentFaculty.setID(textBoxes[1]);
+			break;
+		case 1:
+			department currentDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+											getDepartments().get(ListWindow.getCurrentDepartment());
+			currentDepartment.setName(textBoxes[0]);
+			currentDepartment.setID(textBoxes[1]);
+			break;
+		case 2:
+			program currentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+											getDepartments().get(ListWindow.getCurrentDepartment()).
+											programSet.get(ListWindow.getCurrentProgram());
+			currentProgram.setName(textBoxes[0]);
+			currentProgram.setID(textBoxes[1]);
+			break;
+		case 3:
+			course currentCourse = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+											getDepartments().get(ListWindow.getCurrentDepartment()).
+											programSet.get(ListWindow.getCurrentProgram()).
+											courseSet.get(ListWindow.getCurrentCourse());
+			currentCourse.setName(textBoxes[0], textBoxes[1]); //Will need to be changed when ID's are fixed
+			currentCourse.setID(textBoxes[1]);
+			break;
+		default: System.out.println("The windowType value was an invalid value"); break;
+		}
+	}
+	
+	private String[] getTextBoxes() {
+		String name = "";
+		String ID = "";
+		String courseDescription = "";
+		String notes = "";
+		//This section retrieves any text in the text boxes on the edit screen
+		Component[] components = frmEditView.getContentPane().getComponents();
+		for(int i = 0; i < components.length; i++) {
+			if(components[i].getAccessibleContext().getAccessibleEditableText() != null) {
+				components[i].getAccessibleContext().getAccessibleEditableText().selectText(0, 100);
+				if(components[i].getAccessibleContext().getAccessibleEditableText().getCharCount() > 0) {
+					switch(i) {
+					case 3: 
+						name = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText();	
+						break;
+					case 11: 
+						ID = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText(); 
+						break;
+					case 17: 
+						courseDescription = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText(); 
+						break;
+					case 19: 
+						notes = components[i].getAccessibleContext().getAccessibleEditableText().getSelectedText();
+						break;
+					}
+				}
+			}
+		}
+		String[] retTextBoxes = {name, ID, courseDescription, notes};
+		return retTextBoxes;
 	}
 	
 	public JFrame getFrame() {
