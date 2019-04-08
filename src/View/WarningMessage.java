@@ -2,6 +2,7 @@ package View;
 
 import java.awt.EventQueue;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.Button;
 import java.awt.BorderLayout;
@@ -46,7 +47,7 @@ public class WarningMessage {
 		frame.setVisible(true);
 		
 		// the components of the yes button of the window which would close the window and perform the action they wished
-		Button yesButton = new Button("Yes");
+		JButton yesButton = new JButton("ok");
 		yesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) 
@@ -60,11 +61,11 @@ public class WarningMessage {
 			}
 		});
 		yesButton.setFont(new Font("Dialog", Font.PLAIN, 16));
-		yesButton.setBounds(100, 220, 50, 30);
+		yesButton.setBounds(100, 220, 70, 30);
 		frame.getContentPane().add(yesButton);
 		
 		// components of the no button of the window, which would close the window with making changes
-		Button noButton = new Button("No");
+		JButton noButton = new JButton("No");
 		noButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) 
@@ -73,7 +74,7 @@ public class WarningMessage {
 			}
 		});
 		noButton.setFont(new Font("Dialog", Font.PLAIN, 16));
-		noButton.setBounds(200, 220, 50, 30);
+		noButton.setBounds(200, 220, 70, 30);
 		frame.getContentPane().add(noButton);
 		
 		// components of the warning label which contains the warning message to the user
