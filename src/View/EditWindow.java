@@ -476,8 +476,8 @@ public class EditWindow {
 				dataSendCourse.setName(textBoxes[0].replace(" ", "_"), "101"); // This will need to be deleted when the ID is fixed being the same as name part 2
 				dataSendCourse.setProgram(courseSelectedProgram);
 				database.write("src/Model/database.txt", dataSendCourse);
-				System.out.println(antiReqBox.getSelectedItem());
-				System.out.println(preReqBox.getSelectedItem());
+				//System.out.println(antiReqBox.getSelectedItem());
+				//System.out.println(preReqBox.getSelectedItem());
 				break;
 		default: System.out.println("The windowType value was an invalid value"); break;
 		}

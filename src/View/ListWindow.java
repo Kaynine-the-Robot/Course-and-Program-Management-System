@@ -59,6 +59,7 @@ public class ListWindow {
 	 * Launch the application.
 	 */
 	
+	/*
 	public void main(int displayType, int windowWidth, int windowHeight) {
 		//Setting the passed on type of window to be displayed, i.e. faculty or program
 		windowType = displayType;
@@ -79,6 +80,7 @@ public class ListWindow {
 			}
 		});
 	}
+	*/
 
 
 	public ListWindow(int width, int height, guiWindowController gui, boolean isAdmin) {
@@ -143,10 +145,21 @@ public class ListWindow {
 		btnBack.setBounds(W/6, H - (H/6), W/10, H/15);
 		frmListView.getContentPane().add(btnBack);
 		
+		//Components of the back button on the window, when clicked will terminate current window
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				frmListView.dispose();
+				backGUI.toggleSearchFlag();
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
+			}
+		});
+		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, H/40));
+		btnSearch.setBounds((5*W)/6, (17*H)/60, W/8, H/15);
+		frmListView.getContentPane().add(btnSearch);
 		//Components about the list displaying all the objects in the database
-		
-		
-
 		JList list = new JList();
 		list.setBorder(BorderFactory.createLineBorder((Color.GRAY), 3));
 		list.setFont(new Font("Tahoma", Font.PLAIN, H/30));

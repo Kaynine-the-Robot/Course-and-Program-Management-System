@@ -22,6 +22,7 @@ public class guiWindowController {
 	private int listWindowType = 0;
 	
 	private boolean flag;
+	private boolean searchFlag = false;
 	
 	public guiWindowController(int width, int height) {
 		currentWindow = 0;
@@ -34,6 +35,10 @@ public class guiWindowController {
 		if(addAndEdit == true) {
 			savedWindow = currentWindow;
 			currentWindow = 6;
+		}
+		if(searchFlag) {
+			savedWindow = currentWindow;
+			currentWindow = 7;
 		}
 		if(forwardChange == true && backChange == false) {
 			switch (currentWindow) {
@@ -76,7 +81,13 @@ public class guiWindowController {
 					addAndEdit = false;
 					openEditWindow(W, H);
 					break;
-				
+				case 7:
+					currentWindow = 8;
+					forwardChange = false;
+					addAndEdit = false;
+					searchFlag = false;
+					openSearchWindow(W, H);
+					break;
 					
 				default:
 					//Resets, prints error message
@@ -84,7 +95,7 @@ public class guiWindowController {
 					backChange = false;
 					currentWindow = 0;
 					windowChange();
-					System.out.println("Sorry, something went wrong, try again");
+					System.out.println("Sorry, something went wrong exploring, try again");
 					break;
 			}
 		} else if(forwardChange == false && backChange == true){
@@ -120,13 +131,18 @@ public class guiWindowController {
 					backChange = false;
 					openListWindow(W, H, this.flag);
 					break;
+				case 8:
+					currentWindow = savedWindow;
+					backChange = false;
+					openListWindow(W, H, this.flag);
+					break;
 				default:
 					//Resets, prints error message
 					forwardChange = false;
 					backChange = false;
 					currentWindow = 0;
 					windowChange();
-					System.out.println("Sorry, something went wrong, try again");
+					System.out.println("Sorry, something went wrong going back, try again");
 					break;
 			}
 		} else {
@@ -135,7 +151,7 @@ public class guiWindowController {
 			backChange = false;
 			currentWindow = 1;
 			windowChange();
-			System.out.println("Sorry, something went wrong, try again");
+			System.out.println("Sorry, something went wrong moving at all, try again");
 		}
 		
 	}
@@ -165,6 +181,16 @@ public class guiWindowController {
 	{
 		WelcomeWindow firstWindow = new WelcomeWindow(width, height, this);
 		firstWindow.getFrame().setVisible(true);
+	}
+	
+	private void openSearchWindow(int width, int height)
+	{
+		SearchWindow searchWindow = new SearchWindow(width, height, this);
+		searchWindow.getFrame().setVisible(true);
+	}
+	
+	public void toggleSearchFlag() {
+		searchFlag = true;
 	}
 	
 	public void toggleForwardChange() {
