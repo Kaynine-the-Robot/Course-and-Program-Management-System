@@ -139,8 +139,8 @@ public class SearchWindow {
 		// a label that would display the name of what the user is searching for, in a stuctural diagram
 		// only if the name was found on the database
 		JLabel diagram = new JLabel();
-		diagram.setFont(new Font("Tahoma", Font.PLAIN, 27));
-		diagram.setBounds(W/7, H/4, 1200, 350);
+		diagram.setFont(new Font("Tahoma", Font.PLAIN, H/48));
+		diagram.setBounds(W/10, H/4, W/2, H/8);
 		frmSearch.getContentPane().add(diagram);
 		diagram.setVisible(false);
 		
@@ -161,12 +161,12 @@ public class SearchWindow {
 				//Running the search algorithm which returns the index of the item if found
 				//If not found a NoSuchElementException is thrown and message is printed
 				try {
-					// perform the linear search, if the naame was found then we move on to the if statements
+					// perform the linear search, if the name was found then we move on to the if statements
 					index = linearSearch(nameToBeSearched, selection);
 					// faculty selection, we take the faculty name and leave the other data blank
 					if(selection == 0)
 					{
-						tableData[0] = nameToBeSearched;
+						tableData[0] = faculty.getFacultySet().get(index).getName();
 						tableData[1] = "N/A";
 						tableData[2] = "N/A";
 						tableData[3] = "N/A";
@@ -175,7 +175,7 @@ public class SearchWindow {
 					else if(selection == 1)
 					{
 						tableData[0] = department.allDepartments.get(index).itsfaculty.getName();
-						tableData[1] = nameToBeSearched;
+						tableData[1] = department.allDepartments.get(index).getName();
 						tableData[2] = "N/A";
 						tableData[3] = "N/A";
 					}
@@ -184,7 +184,7 @@ public class SearchWindow {
 					{
 						tableData[0] = program.allPrograms.get(index).itsdepartment.itsfaculty.getName();
 						tableData[1] = program.allPrograms.get(index).itsdepartment.getName();
-						tableData[2] = nameToBeSearched;
+						tableData[2] = program.allPrograms.get(index).getName();
 						tableData[3] = "N/A";
 					}
 					// course selection, we take the name of the course and names of the other attributes associated with the course
@@ -193,7 +193,7 @@ public class SearchWindow {
 						tableData[0] = course.allCourses.get(index).itsprogram.itsdepartment.itsfaculty.getName();
 						tableData[1] = course.allCourses.get(index).itsprogram.itsdepartment.getName();
 						tableData[2] = course.allCourses.get(index).itsprogram.getName();
-						tableData[3] = nameToBeSearched;
+						tableData[3] = course.allCourses.get(index).getName();
 					}
 					for(int i = 0; i < 4; i++)
 						System.out.println(tableData[i]);
@@ -256,7 +256,7 @@ public class SearchWindow {
 		case 0:
 			length = faculty.getFacultySet().size();
 			String nameToCompare = faculty.getFacultySet().get(index).getName();
-			while((index < length) && !(faculty.getFacultySet().get(index).getName()).equals(name))
+			while((index < length) && !(faculty.getFacultySet().get(index).getName().toLowerCase().contains(name.toLowerCase())))
 			{
 				index++;
 			}
@@ -264,7 +264,7 @@ public class SearchWindow {
 		// perform the while loop on the list of departments
 		case 1:
 			length = department.allDepartments.size();
-			while((index < length) && !(department.allDepartments.get(index)).getName().equals(name))
+			while((index < length) && !(department.allDepartments.get(index)).getName().toLowerCase().contains(name.toLowerCase()))
 			{
 				index++;
 			}
@@ -272,7 +272,7 @@ public class SearchWindow {
 		// perform the while on the list of programs
 		case 2:
 			length = program.allPrograms.size();
-			while((index < length) && !(program.allPrograms.get(index)).getName().equals(name))
+			while((index < length) && !(program.allPrograms.get(index)).getName().toLowerCase().contains(name.toLowerCase()))
 			{
 				index++;
 			}
@@ -280,7 +280,7 @@ public class SearchWindow {
 		// perform the while loop on the course list
 		case 3:
 			length = course.allCourses.size();
-			while((index < length) && !(course.allCourses.get(index)).getName().equals(name))
+			while((index < length) && !(course.allCourses.get(index)).getName().toLowerCase().contains(name.toLowerCase()))
 			{
 				index++;
 			}
