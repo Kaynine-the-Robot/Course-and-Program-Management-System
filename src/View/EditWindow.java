@@ -411,6 +411,16 @@ public class EditWindow {
 			btnDelete.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 			btnDelete.setBounds((14*W)/25, H - (H/6), W/10, H/15);
 			frmEditView.getContentPane().add(btnDelete); //Twenty-third component added to window, index 22
+			btnDelete.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					deleteButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+					backGUI.toggleBackChange();
+					backGUI.windowChange();
+					frmEditView.dispose();
+				}
+				
+			});
 		}
 	}
 	
@@ -512,6 +522,31 @@ public class EditWindow {
 											courseSet.get(ListWindow.getCurrentCourse());
 			currentCourse.setName(textBoxes[0], textBoxes[1]); //Will need to be changed when ID's are fixed
 			currentCourse.setID(textBoxes[1]);
+			break;
+		default: System.out.println("The windowType value was an invalid value"); break;
+		}
+	}
+	
+	private void deleteButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
+		//Gets any text written in text boxes on GUI
+		switch(windowType) {
+		case 0:
+			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).deleteFaculty();
+			break;
+		case 1:
+			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).deleteDepartment();
+			break;
+		case 2:
+			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).
+			programSet.get(ListWindow.getCurrentProgram()).deleteProgram();
+			break;
+		case 3:
+			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).
+			programSet.get(ListWindow.getCurrentProgram()).
+			courseSet.get(ListWindow.getCurrentCourse()).deleteCourse();
 			break;
 		default: System.out.println("The windowType value was an invalid value"); break;
 		}

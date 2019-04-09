@@ -6,6 +6,7 @@ public class program {
 	private String name;
 	private String ID;
 	public department itsdepartment;
+	//private static ArrayList<Integer> deletedIDs;
 	public ArrayList<course> courseSet = new ArrayList<course>();
 	public static ArrayList<program> allPrograms = new ArrayList<program>();
 	
@@ -80,4 +81,35 @@ public class program {
 		return "\t\t+ " + name + " " + ID;
 	    }
 
+	/*
+	 * This function assumes a faculty reference and will delete that faculty from the facultySet, then add its 
+	 * deleted index to the list of deleted indexes.
+	 */
+	public void deleteProgram() {
+		int tempIndex = 0;
+		for(int i = 0; i < allPrograms.size(); i++) {
+			if(allPrograms.get(i).equals(this)){
+				tempIndex = i;
+			}
+		}
+		for(int i = 0; i < courseSet.size(); i++) {
+			courseSet.get(i).deleteCourse();
+		}
+		//deletedIDs.add(tempIndex);
+		allPrograms.remove(this);  
+		itsdepartment.deleteProgramFromSet(this);
+	}
+	
+	 /**
+	   * This method is for a program object looking to delete it's reference from the department above it
+	   * 
+	   * @param deleteDepartment
+	   */
+	  public void deleteCourseFromSet(course deleteCourse) {
+		  for(int i = 0; i < courseSet.size(); i++) {
+			  if(courseSet.get(i).equals(deleteCourse)) {
+				courseSet.remove(i);
+			  }
+			}
+	  }
 }

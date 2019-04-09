@@ -8,7 +8,7 @@ public class faculty {
   private String name;
   private String ID;
   private static int newID;
-  private static ArrayList<Integer> deletedIDs;
+  //private static ArrayList<Integer> deletedIDs;
   private ArrayList<department> departmentSet = new ArrayList<department>();
   
   public faculty() {
@@ -107,42 +107,52 @@ public class faculty {
   }
   
   /*
-   * This function takes in a faculty reference and will delete that faculty from the facultySet, then add its 
+   * This function assumes a faculty reference and will delete that faculty from the facultySet, then add its 
    * deleted index to the list of deleted indexes.
    */
-  public static void deleteFaculty(faculty deleteFaculty) {
-	  Integer tempIndex = 0;
+  public void deleteFaculty() {
+	  int tempIndex = 0;
+	  for(int i = 0; i < departmentSet.size(); i++) {
+		  System.out.println(departmentSet.get(i).getName());
+		  for(int j = 0; j < departmentSet.get(i).programSet.size(); j++) {
+			  System.out.println(departmentSet.get(i).programSet.get(j).getName());
+			  for(int k = 0; k < departmentSet.get(i).programSet.get(j).courseSet.size(); k++) {
+				  System.out.println(departmentSet.get(i).programSet.get(j).courseSet.get(k).getName());
+			  }
+		  }
+	  }
 	  for(int i = 0; i < facultySet.size(); i++) {
-		  if(facultySet.get(i).equals(deleteFaculty)){
+		  if(facultySet.get(i).equals(this)){
 			  tempIndex = i;
 		  }
 	  }
-	  facultySet.remove(deleteFaculty);
-	  deletedIDs.add(tempIndex);
-  }
-  
-  /*
-   * This function takes in a faculty's Name and will delete that related faculty from the facultySet, then add its 
-   * deleted index to the list of deleted indexes.
-   */
-  public static void deleteFaculty(String name) {
+	  for(int i = 0; i < departmentSet.size(); i++) {
+			departmentSet.get(i).deleteDepartment();
+		}
+	  //deletedIDs.add(tempIndex);
+	  facultySet.remove(this);
 	  
   }
   
-  /*
-   * This function takes in a faculty's ID and will delete that related faculty from the facultySet, and add its 
-   * deleted index to the list of deleted indexes.
+  /**
+   * This method is for a department object looking to delete it's reference from the faculty above it
+   * 
+   * @param deleteDepartment is the department to be deleted
    */
-  public static void deleteFaculty(int id) {
-	  
+  public void deleteDepartmentFromSet(department deleteDepartment) {
+	  for(int i = 0; i < departmentSet.size(); i++) {
+		  if(departmentSet.get(i).equals(deleteDepartment)) {
+			departmentSet.remove(i);
+		  }
+		}
   }
   
   public static int getFacultyNewID() {
 	  return newID;
   }
   
-  public static ArrayList<Integer> getFacultyDeletedID() {
-	  return deletedIDs;
-  }
- 
+//  public static ArrayList<Integer> getFacultyDeletedID() {
+//	  return deletedIDs;
+//  }
+// 
 }

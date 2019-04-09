@@ -195,6 +195,7 @@ public class ListWindow {
 			DefaultListModel listModel = new DefaultListModel();
 			program selectedProgram = faculty.getFacultySet().get(currentFaculty).getDepartments().get(currentDepartment).programSet.get(currentProgram);
 			for(int i = 0; i < selectedProgram.courseSet.size(); i++) {
+				System.out.println(selectedProgram.courseSet.get(i).getName());
 				listModel.addElement(selectedProgram.courseSet.get(i).getName().replace("_", " "));
 			}
 			list.setModel(listModel);

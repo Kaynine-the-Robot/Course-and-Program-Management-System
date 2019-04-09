@@ -7,6 +7,7 @@ public class course {
 	private String courseNum;
 	private String ID;
 	public program itsprogram;
+	//private static ArrayList<Integer> deletedIDs;
 	public static ArrayList<course> allCourses = new ArrayList<course>();
 	
 	public course() {
@@ -110,6 +111,20 @@ public class course {
 		return "\t\t\t- " + name + " " + courseNum + " " + ID;
 	    }
 
-	
+	/*
+	 * This function assumes a course reference and will delete that course from allCourses, then add its 
+	 * deleted index to the list of deleted indexes.
+	 */
+	public void deleteCourse() {
+		int tempIndex = 0;
+		for(int i = 0; i < allCourses.size(); i++) {
+			if(allCourses.get(i).equals(this)){
+				tempIndex = i;
+			}
+		}
+		//deletedIDs.add(tempIndex);
+		allCourses.remove(this);  
+		itsprogram.deleteCourseFromSet(this);
+	}
 	
 }
