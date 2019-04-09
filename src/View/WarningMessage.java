@@ -47,7 +47,7 @@ public class WarningMessage {
 		frame.setVisible(true);
 		
 		// the components of the yes button of the window which would close the window and perform the action they wished
-		JButton yesButton = new JButton("ok");
+		JButton yesButton = new JButton("Ok");
 		yesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) 
@@ -65,7 +65,7 @@ public class WarningMessage {
 		frame.getContentPane().add(yesButton);
 		
 		// components of the no button of the window, which would close the window with making changes
-		JButton noButton = new JButton("No");
+		JButton noButton = new JButton("Cancel");
 		noButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) 
