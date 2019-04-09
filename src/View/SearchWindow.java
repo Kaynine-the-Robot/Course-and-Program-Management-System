@@ -129,63 +129,18 @@ public class SearchWindow {
 			public void mouseClicked(MouseEvent e) {
 				// the selection from the drop down 
 				int selection = comboBox.getSelectedIndex();
-				System.out.println(selection);
 				// input from the user
 				String nameToBeSearched = textField.getText().replace(" ", "_");
 				// initializing the index of where the input of the user, may lie on an array
 				int index;
-				//switch case for the selection
-				switch(selection)
+				//Running the search algorithm which returns the index of the item if found
+				//If not found a NoSuchElementException is thrown and message is printed
+				try {
+					index = linearSearch(nameToBeSearched, selection);
+				}
+				catch(NoSuchElementException e0)
 				{
-				default:
-					break;
-				// first index from the dropdown is faculty, so we search on the array that contains all the faculties
-				case 0:
-					try
-					{
-					for(int i = 0; i < faculty.getFacultySet().size(); i++)
-						System.out.println(faculty.getFacultySet().get(i).getName());
-					System.out.println(nameToBeSearched + " = input");
-					index = linearSearch(nameToBeSearched, faculty.getFacultySet(), selection);
-					}
-					catch(NoSuchElementException e0)
-					{
-						
-					}
-					break;
-				// second index from the dropdown is department, so we search on the array that contains all the departments
-				case 1:
-					try
-					{
-					index = linearSearch(nameToBeSearched, department.allDepartments, selection);
-					}
-					catch(NoSuchElementException e1)
-					{
-						
-					}
-					break;
-				// third index from the dropdown is program, so we search on the array that contains all the programs
-				case 2:
-					try
-					{
-					index = linearSearch(nameToBeSearched, program.allPrograms, selection);
-					}
-					catch(NoSuchElementException e2)
-					{
-						
-					}
-					break;
-				// fourth index from the dropdown is course, so we search on the array that contains all the courses
-				case 3:
-					try
-					{
-					index = linearSearch(nameToBeSearched, course.allCourses, selection);
-					}
-					catch(NoSuchElementException e3)
-					{
-						
-					}
-					break;
+					System.out.println("The searched faculty was not found in database");
 				}
 				
 				// we have the index of the name of what the user is looking for 
@@ -224,11 +179,10 @@ public class SearchWindow {
 	 * @param selection - the option selected by the user from the dropdown menu
 	 * needed to check which casting we may need to do
 	 */
-	public static <T> int linearSearch(String name, ArrayList<T> listToSearch, int selection) throws NoSuchElementException
+	public static <T> int linearSearch(String name, int selection) throws NoSuchElementException
 	{
-		int length = listToSearch.size();
 		int index = 0;
-		
+		int length = 0;
 		// switch case to handle the selection the user chose to search the name under
 		// needed to determine the type of casting the while is to be performed in
 		// the while loop basically just searches through the array while the name does not equal the element of the array at index
@@ -237,8 +191,9 @@ public class SearchWindow {
 		{
 		// casting to faculty
 		case 0:
+			length = faculty.getFacultySet().size();
 			String nameToCompare = faculty.getFacultySet().get(index).getName();
-			while((index < length) && (faculty.getFacultySet().get(index).getName() != name))
+			while((index < length) && !(faculty.getFacultySet().get(index).getName()).equals(name))
 			{
 				System.out.println(nameToCompare + " = index " + index);
 				index++;
@@ -246,21 +201,24 @@ public class SearchWindow {
 			break;
 		// casting to department
 		case 1:
-			while((index < length) && (((department) listToSearch.get(index)).getName() != name))
+			length = department.allDepartments.size();
+			while((index < length) && !(department.allDepartments.get(index)).getName().equals(name))
 			{
 				index++;
 			}
 			break;
 		// casting to program
 		case 2:
-			while((index < length) && (((program) listToSearch.get(index)).getName() != name))
+			length = program.allPrograms.size();
+			while((index < length) && !(program.allPrograms.get(index)).getName().equals(name))
 			{
 				index++;
 			}
 			break;
 		// casting to course
 		case 3:
-			while((index < length) && (((course) listToSearch.get(index)).getName() != name))
+			length = course.allCourses.size();
+			while((index < length) && !(course.allCourses.get(index)).getName().equals(name))
 			{
 				index++;
 			}

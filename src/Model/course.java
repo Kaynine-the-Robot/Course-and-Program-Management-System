@@ -7,7 +7,11 @@ public class course {
 	private String courseNum;
 	private String ID;
 	public program itsprogram;
+	public static ArrayList<course> allCourses = new ArrayList<course>();
 	
+	public course() {
+		allCourses.add(this);
+	}
 	
 	public boolean setProgram(program newprogram) {
 		program oldprogram = itsprogram;

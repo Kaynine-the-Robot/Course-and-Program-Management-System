@@ -7,6 +7,11 @@ public class department {
 	private String ID;
 	public faculty itsfaculty;
 	public ArrayList<program> programSet = new ArrayList<program>();
+	public static ArrayList<department> allDepartments = new ArrayList<department>();
+	
+	public department() {
+		allDepartments.add(this);
+	}
 	
 	public boolean setFaculty(faculty newfaculty) {
 		faculty oldfaculty = itsfaculty;
