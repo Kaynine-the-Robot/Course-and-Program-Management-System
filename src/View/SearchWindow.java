@@ -9,11 +9,17 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 
 import Controller.guiWindowController;
 import Model.course;
@@ -41,6 +47,7 @@ public class SearchWindow {
 	//The width of the full screen window
 	private static int W;
 	private guiWindowController backGUI;
+	
 	
 	/**
 	 * Launch the application.
@@ -78,6 +85,9 @@ public class SearchWindow {
 		frmSearch.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmSearch.getContentPane().setLayout(null);
 		
+		// list of all the attributes of the system
+		String[] systemAttributes = {"Faculty", "Department", "Program", "Course"};
+		
 		// components of the exit button of the window
 		JButton exitButton = new JButton("Exit");
 		exitButton.setFont(new Font("Dialog", Font.PLAIN, H/40));
@@ -106,23 +116,38 @@ public class SearchWindow {
 		btnBack.setBounds(W/6, H - (H/6), W/10, H/15);
 		frmSearch.getContentPane().add(btnBack);
 		
+		// simple label that lets the user know that the text field is for searching a name on the system
 		JLabel lblNewLabel = new JLabel("Look for:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		lblNewLabel.setBounds(W/15, H/10, W/10, H/20);
 		frmSearch.getContentPane().add(lblNewLabel);
 		
+		// the text field of the window which gets the input from the user
 		textField = new JTextField();
 		textField.setBounds(W/6, H/10, W/3, H/25);
 		textField.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		frmSearch.getContentPane().add(textField);
 		textField.setColumns(10);
 		
+		// the dropdown menu of the window
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Faculty", "Department", "Program", "Course"}));
+		comboBox.setModel(new DefaultComboBoxModel(systemAttributes));
 		comboBox.setBounds(W/6, H/6, W/3, H/20);
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		frmSearch.getContentPane().add(comboBox);
 		
+		// a label that would display the name of what the user is searching for, in a stuctural diagram
+		// only if the name was found on the database
+		JLabel diagram = new JLabel();
+		diagram.setFont(new Font("Tahoma", Font.PLAIN, 27));
+		diagram.setBounds(W/7, H/4, 1200, 350);
+		frmSearch.getContentPane().add(diagram);
+		diagram.setVisible(false);
+		
+		// simple array that would hold data from an attribute in a "table"
+		String[] tableData = new String[4];
+		
+		// components of the search button
 		JButton btnNewButton = new JButton("Search");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
@@ -136,18 +161,58 @@ public class SearchWindow {
 				//Running the search algorithm which returns the index of the item if found
 				//If not found a NoSuchElementException is thrown and message is printed
 				try {
+					// perform the linear search, if the naame was found then we move on to the if statements
 					index = linearSearch(nameToBeSearched, selection);
+					// faculty selection, we take the faculty name and leave the other data blank
+					if(selection == 0)
+					{
+						tableData[0] = nameToBeSearched;
+						tableData[1] = "N/A";
+						tableData[2] = "N/A";
+						tableData[3] = "N/A";
+					}
+					// department selection, we take the department name and the name of its faculty and leave other data blank
+					else if(selection == 1)
+					{
+						tableData[0] = department.allDepartments.get(index).itsfaculty.getName();
+						tableData[1] = nameToBeSearched;
+						tableData[2] = "N/A";
+						tableData[3] = "N/A";
+					}
+					// program selection, we take the program name, its department name and faculty name and leave course data blank
+					else if(selection == 2)
+					{
+						tableData[0] = program.allPrograms.get(index).itsdepartment.itsfaculty.getName();
+						tableData[1] = program.allPrograms.get(index).itsdepartment.getName();
+						tableData[2] = nameToBeSearched;
+						tableData[3] = "N/A";
+					}
+					// course selection, we take the name of the course and names of the other attributes associated with the course
+					else
+					{
+						tableData[0] = course.allCourses.get(index).itsprogram.itsdepartment.itsfaculty.getName();
+						tableData[1] = course.allCourses.get(index).itsprogram.itsdepartment.getName();
+						tableData[2] = course.allCourses.get(index).itsprogram.getName();
+						tableData[3] = nameToBeSearched;
+					}
+					for(int i = 0; i < 4; i++)
+						System.out.println(tableData[i]);
 				}
 				catch(NoSuchElementException e0)
 				{
 					System.out.println("The searched faculty was not found in database");
 				}
+				// set text for the diagram label and make it visible
+				diagram.setText(tableData[0] + " --> " + tableData[1] + " --> " + tableData[2] + " --> " + tableData[3]);
+				diagram.setVisible(true);
 				
 				// we have the index of the name of what the user is looking for 
 				// we just need to go to the list window of what the user searched for
 				// need to handle the logic of switching between windows
 			}
 		});
+		
+		
 		btnNewButton.setBounds((7*W)/12, H/10, W/10, H/9);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		frmSearch.getContentPane().add(btnNewButton);
@@ -173,13 +238,11 @@ public class SearchWindow {
 	/**
 	 * method/algorithm that performs a linear search on the list passed as parameter
 	 * it searches by the name of the attribute, that is why a name is also passed as a parameter
-	 * @param <T> - java generic, to generalize the algorithm for any attribute of the system
 	 * @param name - the name the user is searching for
-	 * @param listToSearch - the list to be searched
 	 * @param selection - the option selected by the user from the dropdown menu
 	 * needed to check which casting we may need to do
 	 */
-	public static <T> int linearSearch(String name, int selection) throws NoSuchElementException
+	public static int linearSearch(String name, int selection) throws NoSuchElementException
 	{
 		int index = 0;
 		int length = 0;
@@ -189,17 +252,16 @@ public class SearchWindow {
 		// if they are the same then we have found the name and at what index it is located at in the array
 		switch(selection)
 		{
-		// casting to faculty
+		// perform the while loop on the list of faculties
 		case 0:
 			length = faculty.getFacultySet().size();
 			String nameToCompare = faculty.getFacultySet().get(index).getName();
 			while((index < length) && !(faculty.getFacultySet().get(index).getName()).equals(name))
 			{
-				System.out.println(nameToCompare + " = index " + index);
 				index++;
 			}
 			break;
-		// casting to department
+		// perform the while loop on the list of departments
 		case 1:
 			length = department.allDepartments.size();
 			while((index < length) && !(department.allDepartments.get(index)).getName().equals(name))
@@ -207,7 +269,7 @@ public class SearchWindow {
 				index++;
 			}
 			break;
-		// casting to program
+		// perform the while on the list of programs
 		case 2:
 			length = program.allPrograms.size();
 			while((index < length) && !(program.allPrograms.get(index)).getName().equals(name))
@@ -215,7 +277,7 @@ public class SearchWindow {
 				index++;
 			}
 			break;
-		// casting to course
+		// perform the while loop on the course list
 		case 3:
 			length = course.allCourses.size();
 			while((index < length) && !(course.allCourses.get(index)).getName().equals(name))
@@ -231,13 +293,13 @@ public class SearchWindow {
 		// checking to see if the index would be valid, and the name was found
 		if(index < length)
 		{
-			System.out.println("" + name + " was found successfully");
+			System.out.println(name + " was found successfully");
 			return index;
 		}
 		// the name was not found, and throw the exception and pop up a warning message
 		else
 		{
-			WarningMessage notFoundPopUp = new WarningMessage("" + name + " cannot be found on the system");
+			WarningMessage notFoundPopUp = new WarningMessage(name + " cannot be found on the system");
 			throw new NoSuchElementException();
 		}
 	}
