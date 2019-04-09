@@ -109,7 +109,7 @@ public class WelcomeWindow {
 		
 		// a crest for the window, nice image to have when the program runs
 		JLabel SFUCrest = new JLabel("");
-		SFUCrest.setBounds(2 * windowWidth / 5,  2 * windowHeight / 7, 360, 360);
+		SFUCrest.setBounds(2 * windowWidth / 7, windowHeight /3, 800, 150);
 		java.awt.Image crest = new ImageIcon(this.getClass().getResource("/IconImages/Crest.gif")).getImage();
 		SFUCrest.setIcon(new ImageIcon(crest));
 		welcomeFrame.getContentPane().add(SFUCrest);
