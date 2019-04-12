@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,10 +20,17 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+
+import Controller.*;
+import Model.*;
 
 /**
  * ListWindow class
@@ -34,50 +42,33 @@ import javax.swing.BorderFactory;
 public class ListWindow {
 	
 	//In this windows case, the type of list to be displayed, i.e. faculties or programs
-	private static int windowType;
+	private static int windowType = 0;
 	//The Height of the full screen window
 	private static int H;
 	//The width of the full screen window
 	private static int W;
-	
+	//The Frame of ListWindow for returning to make visible
 	private JFrame frmListView;
-	/**
-	 * Launch the application.
-	 */
+	private guiWindowController backGUI;
+	private static int currentFaculty = -1;
+	private static int currentDepartment = -1;
+	private static int currentProgram = -1;
+	private static int currentCourse = -1;
 	
-	public void main(int displayType, int windowWidth, int windowHeight) {
-		//Setting the passed on type of window to be displayed, i.e. faculty or program
-		windowType = displayType;
-		W = windowWidth;
-		H = windowHeight;
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try 
-				{
-					ListWindow window = new ListWindow();
-					window.frmListView.setVisible(true);
-					
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the application.
-	 */
-	public ListWindow() 
-	{
-		initialize();
+
+	public ListWindow(int width, int height, guiWindowController gui, boolean isAdmin) {
+		// TODO Auto-generated constructor stub
+		backGUI = gui;
+		W = width;
+		H = height;
+		initialize(isAdmin);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() 
+	private void initialize(boolean isAdmin) 
 	{
 		// the frame work for the window frame
 		frmListView = new JFrame();
@@ -105,84 +96,104 @@ public class ListWindow {
 		btnBack.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				//These conditions are for knowing which depth the list window is in, and when back is pressed
+				//resets the value back to -1, which is useful for telling what window is on
+				if(currentCourse != -1) {
+					currentCourse = -1;
+				}
+				else if(currentProgram != -1) {
+					currentProgram = -1;
+				}
+				else if(currentDepartment != -1) {
+					currentDepartment = -1;
+				}
+				else if(currentFaculty != -1) {
+					currentFaculty = -1;
+				}
 				frmListView.dispose();
+				backGUI.toggleBackChange();
+				backGUI.windowChange();
 			}
 		});
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		btnBack.setBounds(W/6, H - (H/6), W/10, H/15);
 		frmListView.getContentPane().add(btnBack);
 		
+		//Components of the back button on the window, when clicked will terminate current window
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				frmListView.dispose();
+				backGUI.toggleSearchFlag();
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
+			}
+		});
+		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, H/40));
+		btnSearch.setBounds((5*W)/6, (17*H)/60, W/8, H/15);
+		frmListView.getContentPane().add(btnSearch);
 		//Components about the list displaying all the objects in the database
 		JList list = new JList();
 		list.setBorder(BorderFactory.createLineBorder((Color.GRAY), 3));
 		list.setFont(new Font("Tahoma", Font.PLAIN, H/30));
 		
 		//Condition for displaying which type of objects in the list, this is for faculties
-		if(windowType == 0) {
-			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Science"};
-				public int getSize() {
-					return values.length;
-				}
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
+		if(backGUI.getListWindowType() == 0) {
+			DefaultListModel listModel = new DefaultListModel();
+			System.out.println("current = " + currentFaculty);
+			for(int i = 0; i < faculty.getFacultySet().size(); i++) {
+				listModel.addElement(faculty.getFacultySet().get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for departments
-		else if(windowType == 1) {
-			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Computer Science"};
-				public int getSize() {
-					return values.length;
-				}
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
+		else if(backGUI.getListWindowType() == 1) {
+			DefaultListModel listModel = new DefaultListModel();
+			System.out.println("current = " + currentDepartment);
+			faculty selectedFaculty = faculty.getFacultySet().get(currentFaculty);
+			for(int i = 0; i < selectedFaculty.getDepartments().size(); i++) {
+				listModel.addElement(selectedFaculty.getDepartments().get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for programs
-		else if(windowType == 2) {
-			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"Undergraduate"};
-				public int getSize() {
-					return values.length;
-				}
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
+		else if(backGUI.getListWindowType() == 2) {
+			DefaultListModel listModel = new DefaultListModel();
+			System.out.println("current = " + currentProgram);
+			department selectedDepartment = faculty.getFacultySet().get(currentFaculty).getDepartments().get(currentDepartment);
+			for(int i = 0; i < selectedDepartment.programSet.size(); i++) {
+				listModel.addElement(selectedDepartment.programSet.get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		//Condition for displaying which type of objects in the list, this is for courses
 		else {
-			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"CPSC 101"};
-				public int getSize() {
-					return values.length;
-				}
-				public Object getElementAt(int index) {
-					return values[index];
-				}
-			});
+			DefaultListModel listModel = new DefaultListModel();
+			System.out.println("current = " + currentCourse);
+			program selectedProgram = faculty.getFacultySet().get(currentFaculty).getDepartments().get(currentDepartment).programSet.get(currentProgram);
+			for(int i = 0; i < selectedProgram.courseSet.size(); i++) {
+				System.out.println(selectedProgram.courseSet.get(i).getName());
+				listModel.addElement(selectedProgram.courseSet.get(i).getName().replace("_", " "));
+			}
+			list.setModel(listModel);
 		}
 		
 		list.setBounds(W/50, H/20, (2*W)/5, (3*H)/4);
 		frmListView.getContentPane().add(list);
 		
+		if(isAdmin == true)
+		{
 		//Components for the edit/delete button to go to that screen for the selected item on the list
 		JButton btnEditdelete = new JButton("Edit/Delete");
 		btnEditdelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(list.getSelectedIndex());
-				if(list.getSelectedIndex() == 0) { //Will have to be changed to accommodate a list of values, use index's of original list
-						frmListView.setVisible(false);
-						EditWindow facultyWindow = new EditWindow();
-						//Passing on parameters of the what window to display for i.e. Faculty, a boolean of if the next window
-						//is for adding or editing, and the width and heights
-						facultyWindow.main(windowType, false, W, H);
-						frmListView.setVisible(true);
-				}
+				updateCurrentCourse(list);
+				backGUI.toggleAddAndEdit();	
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
+				frmListView.dispose();
 			}
 		});
 		btnEditdelete.setFont(new Font("Tahoma", Font.PLAIN, H/40));
@@ -194,16 +205,87 @@ public class ListWindow {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				frmListView.setVisible(false);
-				EditWindow facultyWindow = new EditWindow();
-				//Passing on parameters of the what window to display for i.e. Faculty, a boolean of if the next window
-				//is for adding or editing, and the width and heights
-				facultyWindow.main(windowType, true, W, H);
-				frmListView.setVisible(true);
+				updateCurrentCourse(list);
+				backGUI.toggleAddAndEdit();
+				backGUI.toggleAddOrEdit();
+				backGUI.toggleForwardChange();
+				backGUI.windowChange();
+				frmListView.dispose();
+				
 			}
 		});
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, H/40));
 		btnAdd.setBounds((5*W)/6, H/20, W/8, H/15);
 		frmListView.getContentPane().add(btnAdd);
+		}
+	
+		if(backGUI.getListWindowType() != 3) {
+			//Components of the add button to go to that screen and add a new item to the database
+			JButton btnExplore = new JButton("Explore");
+			btnExplore.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(list.getSelectedIndex() != -1) {
+					updateCurrentCourse(list);
+					backGUI.toggleForwardChange();
+					backGUI.windowChange();
+					frmListView.dispose();
+					}
+					
+				}
+			});
+			btnExplore.setFont(new Font("Tahoma", Font.PLAIN, H/40));
+			btnExplore.setBounds((5*W)/6, H/2, W/8, H/15);
+			frmListView.getContentPane().add(btnExplore);
+		}
+	}
+	
+	public JFrame getFrame() {
+		return frmListView;
+	}
+	
+	public static int getCurrentFaculty() {
+		return currentFaculty;
+	}
+	
+	public static int getCurrentDepartment() {
+		return currentDepartment;
+	}
+	
+	public static int getCurrentProgram() {
+		return currentProgram;
+	}
+	
+	public static int getCurrentCourse() {
+		return currentCourse;
+	}
+	
+	private void updateCurrentCourse(JList list) {
+		switch(backGUI.getListWindowType()) {
+		case 0: currentFaculty = list.getSelectedIndex();
+		case 1: currentDepartment = list.getSelectedIndex();
+		case 2: currentProgram = list.getSelectedIndex();
+		case 3: currentCourse = list.getSelectedIndex();
+		}
+	}
+	
+	public static void setCurrentFaculty(int setter)
+	{
+		currentFaculty = setter;
+	}
+	
+	public static void setCurrentDepartment(int setter)
+	{
+		currentDepartment = setter;
+	}
+	
+	public static void setCurrentProgram(int setter)
+	{
+		currentProgram = setter;
+	}
+	
+	public static void setCurrentCourse(int setter)
+	{
+		currentCourse = setter;
 	}
 }
