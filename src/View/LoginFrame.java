@@ -1,5 +1,6 @@
 /**
 * The LoginFrame window will let the user login to the program
+
 * and see its contents, make an administrator account, find
 * password or id of existing user, and let students access
 * the student version of the program.
@@ -110,18 +111,18 @@ public class LoginFrame {
 		
 		Label lblAdministratorLogin = new Label(shlLogin, SWT.NONE);
 		lblAdministratorLogin.setFont(SWTResourceManager.getFont("Tahoma", 24, SWT.NORMAL));
-		lblAdministratorLogin.setBounds(W*2 / 5, H/12, 300, 50);
+		lblAdministratorLogin.setBounds(W*2 / 5, H/12, 360, 50);
 		lblAdministratorLogin.setText("Administrator Login");
 
 		
 		Label lblForgotYourUsername = new Label(shlLogin, SWT.NONE);
 		lblForgotYourUsername.setFont(SWTResourceManager.getFont("Tahoma", 17, SWT.NORMAL));
-		lblForgotYourUsername.setBounds(W*2 /5 - W/40, H/2 + H/28, 371, 34);
+		lblForgotYourUsername.setBounds(W*2 /5 - W/40, H/2 + H/28, 450, 34);
 		lblForgotYourUsername.setText("Forgot your username or password?");
 		
 		Label lblAreYouA = new Label(shlLogin, SWT.NONE);
 		lblAreYouA.setFont(SWTResourceManager.getFont("Tahoma", 17, SWT.NORMAL));
-		lblAreYouA.setBounds(W/3 - W/30, H/2 + H/5, 682, 34);
+		lblAreYouA.setBounds(W/3 - W/25, H/2 + H/5, 850, 34);
 		lblAreYouA.setText("Are you a student? Access the portal by clicking the button below!");
 		
 		// User Input
@@ -181,7 +182,7 @@ public class LoginFrame {
 		// Opens a window to find user password
 		Button btnFindPassword = new Button(shlLogin, SWT.NONE);
 		btnFindPassword.setFont(SWTResourceManager.getFont("Tahoma", 17, SWT.NORMAL));
-		btnFindPassword.setBounds(W/3, H - H/2 + H/9, 170, 40);
+		btnFindPassword.setBounds(W/3, H - H/2 + H/9, 200, 40);
 		btnFindPassword.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -195,7 +196,7 @@ public class LoginFrame {
 		// Opens a window to find user id
 		Button btnFindUsername = new Button(shlLogin, SWT.NONE);
 		btnFindUsername.setFont(SWTResourceManager.getFont("Tahoma", 17, SWT.NORMAL));
-		btnFindUsername.setBounds(W/2 + W/35, H - H/2 + H/9, 170, 40);
+		btnFindUsername.setBounds(W/2 + W/35, H - H/2 + H/9, 200, 40);
 		btnFindUsername.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
