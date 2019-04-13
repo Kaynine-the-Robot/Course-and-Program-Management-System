@@ -548,17 +548,17 @@ public class EditWindow {
 		String[] textBoxes = getTextBoxes();
 		//Setting up the current objects based on the windows that are being edited
 		faculty currentFaculty = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
-		department currentDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-				getDepartments().get(ListWindow.getCurrentDepartment());
-		program currentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-				getDepartments().get(ListWindow.getCurrentDepartment()).
-				programSet.get(ListWindow.getCurrentProgram());
+		
+		
+				
 		switch(windowType) {
 		case 0:
 			database.edit("src/Model/database.txt", textBoxes[0].replace(" ", "_"), currentFaculty);
 			currentFaculty.setName(textBoxes[0].replace(" ", "_"));
 			break;
 		case 1: 
+			department currentDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment());
 			String facultyBoxSelect = facultyBox.getSelectedItem().toString().replace(" ", "_");
 			//This condition is for seperating if the user has selected a different faculty than the 
 			//department belonged to before, will delete all programs belonging to it
@@ -573,10 +573,14 @@ public class EditWindow {
 			
 			break;
 		case 2:
+			department currentDepartmentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment());
+			program currentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).programSet.get(ListWindow.getCurrentProgram());
 			String departmentBoxSelect = departmentBox.getSelectedItem().toString().replace(" ", "_");
 			//This condition is for seperating if the user has selected a different department than the 
 			//program belonged to before, will delete all courses under it
-			if(currentDepartment.getName().equals(departmentBoxSelect)) {
+			if(currentDepartmentProgram.getName().equals(departmentBoxSelect)) {
 				database.edit("src/Model/database.txt", textBoxes[0], currentProgram);
 				currentProgram.setName(textBoxes[0].replace(" ", "_"));
 			}
@@ -587,6 +591,8 @@ public class EditWindow {
 
 			break;
 		case 3:
+			program currentProgramCourse = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+			getDepartments().get(ListWindow.getCurrentDepartment()).programSet.get(ListWindow.getCurrentProgram());
 			course currentCourse = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
 											getDepartments().get(ListWindow.getCurrentDepartment()).
 											programSet.get(ListWindow.getCurrentProgram()).
@@ -594,7 +600,7 @@ public class EditWindow {
 			String programBoxSelect = programBox.getSelectedItem().toString().replace(" ", "_");
 			//This condition is for seperating if the user has selected a different program than the 
 			//course belonged to before
-			if(currentProgram.getName().equals(programBoxSelect)) {
+			if(currentProgramCourse.getName().equals(programBoxSelect)) {
 				database.edit("src/Model/database.txt", textBoxes[0], currentCourse);
 				currentCourse.setName(textBoxes[0].replace(" ", "_"), textBoxes[1]);
 			}
