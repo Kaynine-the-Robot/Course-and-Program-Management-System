@@ -67,6 +67,15 @@ public class department {
 		return true;
 	}
 	
+	public static boolean containsDepartment(String name) {
+		for(int i = 0; i < allDepartments.size(); i++) {
+			if(allDepartments.get(i).getName().equals(name.replace(" ", "_"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getID() {
 		return this.ID;
 	}

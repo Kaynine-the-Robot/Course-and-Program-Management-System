@@ -97,6 +97,15 @@ public class faculty {
 	  return null;
   }
   
+  public static boolean containsFaculty(String name) {
+	  for(int i = 0; i < facultySet.size(); i++) {
+		  if(facultySet.get(i).getName().equals(name.replace(" ", "_"))) {
+			  return true;
+		  }
+	  }
+	  return false;
+  }
+  
   public department getDepartment(String name) {
 	  for(int i = 0; i < departmentSet.size(); i++) {
 		  if(departmentSet.get(i).getName().equals(name)) {
@@ -107,7 +116,7 @@ public class faculty {
   }
   
   /*
-   * This function assumes a faculty reference and will delete that faculty from the facultySet, then add its 
+   * This function will delete the faculty from the facultySet, then add its 
    * deleted index to the list of deleted indexes.
    */
   public void deleteFaculty() {
@@ -131,6 +140,7 @@ public class faculty {
 		}
 	  //deletedIDs.add(tempIndex);
 	  facultySet.remove(this);
+	  newID = facultySet.size();
 	  
   }
   
@@ -147,8 +157,14 @@ public class faculty {
 		}
   }
   
-  public static int getFacultyNewID() {
-	  return newID;
+  public static String getFacultyNewID() {
+	  if(newID < 10) {
+		  return "0" + String.valueOf(newID);
+	  }
+	  else {
+		  return String.valueOf(newID);
+	  }
+	  
   }
   
 //  public static ArrayList<Integer> getFacultyDeletedID() {

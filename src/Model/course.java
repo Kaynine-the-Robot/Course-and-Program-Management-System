@@ -78,6 +78,15 @@ public class course {
 		return true;
 	}
 	
+	public static boolean containsCourse(String name) {
+		for(int i = 0; i < allCourses.size(); i++) {
+			if(allCourses.get(i).getName().equals(name.replace(" ", "_"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getID() {
 		return this.ID;
 	}
@@ -86,27 +95,37 @@ public class course {
 		return this.name;
 	}
 	
+	/**
+	 * A getter for the course number of the course
+	 * @return the course number of the course
+	 */
 	public int getCourseNum() {
 		return Integer.parseInt(courseNum);
 	}
 	
+	/**
+	 * A getter for the full name of a course
+	 * @return A String with the name and course number of the course
+	 */
 	public String getFullName() {
 		return name+ " " + courseNum;
 	}
 	
+	/**
+	 * This method gets the full ID of the course, including all the other objects it belongs to
+	 * @return a String of the total ID of a course
+	 */
 	public String getFullID() {
-		//System.out.println(this.itsprogram.getID());
-		//System.out.println(this.itsprogram.itsdepartment.itsfaculty.getDepartments().size());
+
 		for(int i = 0; i < this.itsprogram.itsdepartment.itsfaculty.getDepartments().size(); i ++) {
-			//System.out.println(this.itsprogram.itsdepartment.getName());
-			//System.out.println(this.itsprogram.itsdepartment.getID());
-			
 		}
-		//System.out.println(this.itsprogram.itsdepartment.getID());
-		//System.out.println(this.itsprogram.itsdepartment.itsfaculty.getID());
 		return this.itsprogram.itsdepartment.itsfaculty.getID()+this.itsprogram.itsdepartment.getID()+this.itsprogram.getID()+this.getID();
 	}
 	
+	/**
+	 * This method returns the formatted string for comparing to the database
+	 * @return
+	 */
 	public String getFullLine(){
 		return "\t\t\t- " + name + " " + courseNum + " " + ID;
 	    }

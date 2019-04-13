@@ -47,42 +47,25 @@ public class ListWindow {
 	private static int H;
 	//The width of the full screen window
 	private static int W;
-	//The Frame of ListWindow for returning to make visible
+	
+	//Storing the frame of the window to be accessed all over the function and make visible
 	private JFrame frmListView;
 	private guiWindowController backGUI;
+	
+	//The ints representing the current object as an index for the ArrayLists on the objects being observed
+	//helps easily see where the program is
 	private static int currentFaculty = -1;
 	private static int currentDepartment = -1;
 	private static int currentProgram = -1;
 	private static int currentCourse = -1;
-	
+
 	/**
-	 * Launch the application.
+	 * The constructor for the List Window to display and interact wit hthe user
+	 * @param width is the screen width
+	 * @param height is the screen height
+	 * @param gui is the controller for windows in the GUI, used for when this window is finished with
+	 * @param isAdmin is a flag for if the user is an admin who can edit or a student who can only view
 	 */
-	
-	/*
-	public void main(int displayType, int windowWidth, int windowHeight) {
-		//Setting the passed on type of window to be displayed, i.e. faculty or program
-		windowType = displayType;
-		W = windowWidth;
-		H = windowHeight;
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try 
-				{
-					//ListWindow window = new ListWindow();
-					//window.frmListView.setVisible(true);
-					
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
-
-
 	public ListWindow(int width, int height, guiWindowController gui, boolean isAdmin) {
 		// TODO Auto-generated constructor stub
 		backGUI = gui;
@@ -262,26 +245,50 @@ public class ListWindow {
 		}
 	}
 	
+	/**
+	 * A getter for the frame of the window, for making visible or not
+	 * @return the JFrame of the current window
+	 */
 	public JFrame getFrame() {
 		return frmListView;
 	}
 	
+	/**
+	 * A getter for the int of the current faculty index
+	 * @return the current faculty int
+	 */
 	public static int getCurrentFaculty() {
 		return currentFaculty;
 	}
 	
+	/**
+	 * A getter for the int of the current department index
+	 * @return the current department int
+	 */
 	public static int getCurrentDepartment() {
 		return currentDepartment;
 	}
 	
+	/**
+	 * A getter for the int of the current program index
+	 * @return the current program int
+	 */
 	public static int getCurrentProgram() {
 		return currentProgram;
 	}
 	
+	/**
+	 * A getter for the int of the current faculty index
+	 * @return the current faculty int
+	 */
 	public static int getCurrentCourse() {
 		return currentCourse;
 	}
 	
+	/**
+	 * A method for updating the current course's selected index according to the other selections
+	 * @param list is a JList for the user selecting what to edit
+	 */
 	private void updateCurrentCourse(JList list) {
 		switch(backGUI.getListWindowType()) {
 		case 0: currentFaculty = list.getSelectedIndex();

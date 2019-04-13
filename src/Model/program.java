@@ -68,6 +68,15 @@ public class program {
 		return true;
 	}
 	
+	public static boolean containsProgram(String name) {
+		for(int i = 0; i < allPrograms.size(); i++) {
+			if(allPrograms.get(i).getName().equals(name.replace(" ", "_"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getID() {
 		return this.ID;
 		//return Integer.parseInt(this.ID);

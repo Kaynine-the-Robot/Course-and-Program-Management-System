@@ -48,58 +48,41 @@ public class EditWindow {
 	//The width of the full screen window
 	private static int W;
 	
+	//Strings for storing a previously selected drop down menu item from the window
 	private String pastSelectedFacultyBox = "";
 	private String pastSelectedDepartmentBox = "";
 	
+	//Boolean flags for triggering drop down menu changes in the window
 	private boolean triggerDepartmentBoxEvent = true;
 	private boolean triggerProgramBoxEvent = true;
 	
-	
+	//Storing the frame of the window to be accessed all over the function and make visible
 	private JFrame frmEditView;
 	private guiWindowController backGUI;
 	
+	//Textfield Boxes to be stored and accessed outside the scope of if conditions and methods
 	private JTextField textField_4;
 	private JTextArea textField_8;
 	private JTextField textField;
 	private JTextArea textField_1;
-	/**
-	 * Launch the application.
-	 */
-	
-	public void main(int displayType, boolean bool, int windowWidth, int windowHeight) {
-		//Passed on window type, saved for knowing what buttons and menus to display
-		windowType = displayType;
-		//Passed on flag of the two possible button options to display
-		addOrEdit = bool;
-		H = windowHeight;
-		W = windowWidth;
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try 
-				{
-					//EditWindow window = new EditWindow();
-					//window.frmEditView.setVisible(true);
-					
-				} catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
-	 * Create the application.
+	 * Constructor for the window screen, which is the screen for editing data entries in the system. Calls
+	 * inititalize which sets up the sindow and displays it.
+	 * @param width is the screen width
+	 * @param height is the screen height
+	 * @param gui is the controller for windows in the GUI, used for when this window is finished with
+	 * @param displayType is the current screen type that the Edit Window should be editing, which is 
+	 * different for different data entries
+	 * @param addEdit is a boolean flag for if the screen is an adding screen or an editing screen, which
+	 * display different buttons and do different things
 	 */
 	public EditWindow(int width, int height, guiWindowController gui, int displayType, boolean addEdit) 
 	{
 		backGUI = gui;
 		W = width;
 		H = height;
-		//Passed on window type, saved for knowing what buttons and menus to display
 		windowType = displayType;
-		//Passed on flag of the two possible button options to display
 		addOrEdit = addEdit;
 		initialize();
 	}
@@ -116,7 +99,7 @@ public class EditWindow {
 		frmEditView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmEditView.getContentPane().setLayout(null);
 		
-		//
+		//These are drop down menus, which are initialized here to avoid scope issues
 		JComboBox facultyBox = new JComboBox();
 		JComboBox departmentBox = new JComboBox();
 		JComboBox programBox = new JComboBox();
@@ -173,7 +156,8 @@ public class EditWindow {
 		///////////////////////////////////////////////////////////////////////////////
 		
 		
-		
+		//This is for if the screen is either a department, program, or course editing screen, sets up buttons only available
+		//on these screens
 		if(backGUI.getListWindowType() == 1 | backGUI.getListWindowType() == 2 | backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu of possible faculties to be under for 
@@ -221,6 +205,8 @@ public class EditWindow {
 			
 		}
 		
+		//This is for if the screen is either a program or course editing screen, sets up buttons only available
+		//on these screens
 		if(backGUI.getListWindowType() == 2 | backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu for the drop down menu of possible departments to be under for 
@@ -268,7 +254,7 @@ public class EditWindow {
 			});
 		}
 		
-		
+		//This is for if the screen is a course editing screen, sets up buttons only available on a course screen
 		if(backGUI.getListWindowType() == 3) {
 			
 			//Components of a label and drop down menu for the drop down menu of possible programs to be under for 
@@ -385,6 +371,9 @@ public class EditWindow {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					addButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+					frmEditView.dispose();
+					backGUI.toggleBackChange();
+					backGUI.windowChange();
 				}
 				
 			});
@@ -401,6 +390,9 @@ public class EditWindow {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					editButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+					frmEditView.dispose();
+					backGUI.toggleBackChange();
+					backGUI.windowChange();
 				}
 				
 			});
@@ -414,7 +406,7 @@ public class EditWindow {
 			btnDelete.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					deleteButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+					deleteButtonEvent();
 					backGUI.toggleBackChange();
 					backGUI.windowChange();
 					frmEditView.dispose();
@@ -424,8 +416,14 @@ public class EditWindow {
 		}
 	}
 	
-	 /*
-	  * This method is for adding an entry to the database for when add or edit buttons are pressed. 
+	 /**
+	  * This method handles the event when the add button is pressed. It will add the changes made on screen to the objects
+	  * in the program and the database
+	  * @param facultyBox is a JComboBox/drop down menu for the faculty drop down menu on the window
+	  * @param departmentBox is a JComboBox/drop down menu for the department drop down menu on the window
+	  * @param programBox is a JComboBox/drop down menu for the program drop down menu on the window
+	  * @param antiReqBox is a JComboBox/drop down menu for the anti requisite drop down menu on the window
+	  * @param preReqBox is a JComboBox/drop down menu for the prerequisite drop down menu on the window
 	  */
 	private void addButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
 		//Gets any text written in text boxes on GUI
@@ -435,123 +433,220 @@ public class EditWindow {
 		// loaded in the previous function to write the newly made faculty, department... to the
 		// database.
 		switch(windowType) {
+		//For if the window is for editing faculties
 		case 0: 
+			//Checks to make sure the data is not already added to avoid errors
+			if(!faculty.containsFaculty(textBoxes[0])){
+				//Sets up a new faculty to be made using the data entered in the GUI
 				faculty dataSendFaculty = new faculty();
 				dataSendFaculty.setName(textBoxes[0].replace(" ", "_"));
 				if(faculty.getFacultySet().size() < 10) {
-					dataSendFaculty.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+					dataSendFaculty.setID("0" + String.valueOf(faculty.getFacultySet().size() - 1));
 				}
 				else {
-					dataSendFaculty.setID(String.valueOf(faculty.getFacultySet().size()));
+					dataSendFaculty.setID(String.valueOf(faculty.getFacultySet().size() - 1));
 				}
+				//Writing the made data to the database, the new object has already entered itself into local objects 
+				//in the program and GUI
 				database.write("src/Model/database.txt", dataSendFaculty);
-				break;
-		case 1: department dataSendDepartment = new department();
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " has been added to the system");
+			}
+			else {
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " already exists in the system");
+			}
+			break;
+		//For if the window is for editing departments
+		case 1: 
+			//Checks to make sure the data is not already added to avoid errors
+			if(!department.containsDepartment(textBoxes[0])){
+				//Sets up a new department to be made using the data entered in the GUI
+				department dataSendDepartment = new department();
 				faculty departmentSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
 				dataSendDepartment.setName(textBoxes[0].replace(" ", "_"));
 				if(departmentSelectedFaculty.getDepartments().size() < 10) {
-					dataSendDepartment.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+					dataSendDepartment.setID("0" + String.valueOf(departmentSelectedFaculty.getDepartments().size()));
 				}
 				else {
-					dataSendDepartment.setID(String.valueOf(faculty.getFacultySet().size()));
+					dataSendDepartment.setID(String.valueOf(String.valueOf(departmentSelectedFaculty.getDepartments().size())));
 				}
 				dataSendDepartment.setFaculty(departmentSelectedFaculty);
+				//Writing the made data to the database, the new object has already entered itself into local objects 
+				//in the program and GUI
 				database.write("src/Model/database.txt", dataSendDepartment);
-				break;
-		
-		case 2: program dataSendProgram = new program();
+			}
+			else {
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " already exists in the system");
+			}
+			break;
+		//For if the window is for editing programs
+		case 2: 
+			//Checks to make sure the data is not already added to avoid errors
+			if(!program.containsProgram(textBoxes[0])){
+				//Sets up a new program to be made using the data entered in the GUI
+				program dataSendProgram = new program();
 				faculty programSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
 				department programSelectedDepartment = programSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
 				dataSendProgram.setName(textBoxes[0].replace(" ", "_"));
 				if(programSelectedDepartment.programSet.size() < 10) {
-					dataSendProgram.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+					dataSendProgram.setID("0" + String.valueOf(programSelectedDepartment.programSet.size()));
 				}
 				else {
-					dataSendProgram.setID(String.valueOf(faculty.getFacultySet().size()));
+					dataSendProgram.setID(String.valueOf(programSelectedDepartment.programSet.size()));
 				}
 				dataSendProgram.setDepartment(programSelectedDepartment);
+				//Writing the made data to the database, the new object has already entered itself into local objects 
+				//in the program and GUI
 				database.write("src/Model/database.txt", dataSendProgram);
-				break;
-			
-		case 3: course dataSendCourse = new course();
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " has been added to the system");
+			}
+			else {
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " already exists in the system");
+			}
+				
+			break;
+		//For if the window is for editing courses
+		case 3: 
+			//Checks to make sure the data is not already added to avoid errors
+			if(!course.containsCourse(textBoxes[0])){
+				//Sets up a new course to be made using the data entered in the GUI
+				course dataSendCourse = new course();
 				faculty courseSelectedFaculty = faculty.getFaculty(facultyBox.getSelectedItem().toString().replace(" ", "_"));
 				department courseSelectedDepartment = courseSelectedFaculty.getDepartment(departmentBox.getSelectedItem().toString().replace(" ", "_"));
 				program courseSelectedProgram = courseSelectedDepartment.getProgram(programBox.getSelectedItem().toString().replace(" ", "_"));
 				if(courseSelectedProgram.courseSet.size() < 10) {
-					dataSendCourse.setID("0" + String.valueOf(faculty.getFacultySet().size()));
+					dataSendCourse.setID("0" + String.valueOf(String.valueOf(courseSelectedProgram.courseSet.size())));
 				}
 				else {
-					dataSendCourse.setID(String.valueOf(faculty.getFacultySet().size()));
+					dataSendCourse.setID(String.valueOf(String.valueOf(courseSelectedProgram.courseSet.size())));
 				}
 				dataSendCourse.setName(textBoxes[0].replace(" ", "_"), "101"); // This will need to be deleted when the ID is fixed being the same as name part 2
 				dataSendCourse.setProgram(courseSelectedProgram);
+				//Writing the made data to the database, the new object has already entered itself into local objects 
+				//in the program and GUI
 				database.write("src/Model/database.txt", dataSendCourse);
-				//System.out.println(antiReqBox.getSelectedItem());
-				//System.out.println(preReqBox.getSelectedItem());
-				break;
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " has been added to the system");
+			}
+			else {
+				WarningMessage addWarning = new WarningMessage(textBoxes[0] + " already exists in the system");
+			}
+			break;
 		default: System.out.println("The windowType value was an invalid value"); break;
 		}
 	}
 	
+	/**
+	 * This method handles the event when the edit/change button is pressed. It will add the changes made on screen to the objects
+	 * in the program and the database
+	 * @param facultyBox is a JComboBox/drop down menu for the faculty drop down menu on the window
+	 * @param departmentBox is a JComboBox/drop down menu for the department drop down menu on the window
+	 * @param programBox is a JComboBox/drop down menu for the program drop down menu on the window
+	 * @param antiReqBox is a JComboBox/drop down menu for the anti requisite drop down menu on the window
+	 * @param preReqBox is a JComboBox/drop down menu for the prerequisite drop down menu on the window
+	 */
 	private void editButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
 		//Gets any text written in text boxes on GUI
 		String[] textBoxes = getTextBoxes();
+		//Setting up the current objects based on the windows that are being edited
+		faculty currentFaculty = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
+		department currentDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+				getDepartments().get(ListWindow.getCurrentDepartment());
+		program currentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+				getDepartments().get(ListWindow.getCurrentDepartment()).
+				programSet.get(ListWindow.getCurrentProgram());
 		switch(windowType) {
 		case 0:
-			faculty currentFaculty = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
-			currentFaculty.setName(textBoxes[0]);
-			currentFaculty.setID(textBoxes[1]);
+			database.edit("src/Model/database.txt", textBoxes[0].replace(" ", "_"), currentFaculty);
+			currentFaculty.setName(textBoxes[0].replace(" ", "_"));
 			break;
-		case 1:
-			department currentDepartment = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-											getDepartments().get(ListWindow.getCurrentDepartment());
-			currentDepartment.setName(textBoxes[0]);
-			currentDepartment.setID(textBoxes[1]);
+		case 1: 
+			String facultyBoxSelect = facultyBox.getSelectedItem().toString().replace(" ", "_");
+			//This condition is for seperating if the user has selected a different faculty than the 
+			//department belonged to before, will delete all programs belonging to it
+			if(currentFaculty.getName().equals(facultyBoxSelect)) {
+				database.edit("src/Model/database.txt", textBoxes[0], currentDepartment);
+				currentDepartment.setName(textBoxes[0].replace(" ", "_"));
+			}
+			else {
+				deleteButtonEvent();
+				addButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+			}
+			
 			break;
 		case 2:
-			program currentProgram = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-											getDepartments().get(ListWindow.getCurrentDepartment()).
-											programSet.get(ListWindow.getCurrentProgram());
-			currentProgram.setName(textBoxes[0]);
-			currentProgram.setID(textBoxes[1]);
+			String departmentBoxSelect = departmentBox.getSelectedItem().toString().replace(" ", "_");
+			//This condition is for seperating if the user has selected a different department than the 
+			//program belonged to before, will delete all courses under it
+			if(currentDepartment.getName().equals(departmentBoxSelect)) {
+				database.edit("src/Model/database.txt", textBoxes[0], currentProgram);
+				currentProgram.setName(textBoxes[0].replace(" ", "_"));
+			}
+			else {
+				deleteButtonEvent();
+				addButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+			}
+
 			break;
 		case 3:
 			course currentCourse = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
 											getDepartments().get(ListWindow.getCurrentDepartment()).
 											programSet.get(ListWindow.getCurrentProgram()).
 											courseSet.get(ListWindow.getCurrentCourse());
-			currentCourse.setName(textBoxes[0], textBoxes[1]); //Will need to be changed when ID's are fixed
-			currentCourse.setID(textBoxes[1]);
+			String programBoxSelect = programBox.getSelectedItem().toString().replace(" ", "_");
+			//This condition is for seperating if the user has selected a different program than the 
+			//course belonged to before
+			if(currentProgram.getName().equals(programBoxSelect)) {
+				database.edit("src/Model/database.txt", textBoxes[0], currentCourse);
+				currentCourse.setName(textBoxes[0].replace(" ", "_"), textBoxes[1]);
+			}
+			else {
+				deleteButtonEvent();
+				addButtonEvent(facultyBox, departmentBox, programBox, antiReqBox, preReqBox);
+			}
 			break;
 		default: System.out.println("The windowType value was an invalid value"); break;
 		}
 	}
 	
-	private void deleteButtonEvent(JComboBox facultyBox, JComboBox departmentBox, JComboBox programBox, JComboBox antiReqBox, JComboBox preReqBox) {
+	/**
+	 * Will delete a data entry from the local objects and database
+	 */
+	private void deleteButtonEvent() {
 		//Gets any text written in text boxes on GUI
 		switch(windowType) {
 		case 0:
-			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).deleteFaculty();
+			faculty facultyDelete = faculty.getFacultySet().get(ListWindow.getCurrentFaculty());
+			database.delete("src/Model/database.txt", facultyDelete);
+			facultyDelete.deleteFaculty();
 			break;
 		case 1:
-			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-			getDepartments().get(ListWindow.getCurrentDepartment()).deleteDepartment();
+			department departmentDelete = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+					getDepartments().get(ListWindow.getCurrentDepartment());
+			database.delete("src/Model/database.txt", departmentDelete);
+			departmentDelete.deleteDepartment();
 			break;
 		case 2:
-			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-			getDepartments().get(ListWindow.getCurrentDepartment()).
-			programSet.get(ListWindow.getCurrentProgram()).deleteProgram();
+			program programDelete = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+					getDepartments().get(ListWindow.getCurrentDepartment()).
+					programSet.get(ListWindow.getCurrentProgram());
+			database.delete("src/Model/database.txt", programDelete);
+			programDelete.deleteProgram();
 			break;
 		case 3:
-			faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
-			getDepartments().get(ListWindow.getCurrentDepartment()).
-			programSet.get(ListWindow.getCurrentProgram()).
-			courseSet.get(ListWindow.getCurrentCourse()).deleteCourse();
+			course courseDelete = faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
+					getDepartments().get(ListWindow.getCurrentDepartment()).
+					programSet.get(ListWindow.getCurrentProgram()).
+					courseSet.get(ListWindow.getCurrentCourse());
+			database.delete("src/Model/database.txt", courseDelete);
+			courseDelete.deleteCourse();
 			break;
 		default: System.out.println("The windowType value was an invalid value"); break;
 		}
 	}
 	
+	/**
+	 * This method will look through the text boxes on the screen and return a string array of what is in them
+	 * @return a String array of text box entries in the GUI window
+	 */
 	private String[] getTextBoxes() {
 		String name = "";
 		String ID = "";
@@ -584,10 +679,18 @@ public class EditWindow {
 		return retTextBoxes;
 	}
 	
+	/**
+	 * This method is a getter for the frame of the window
+	 * @return the frame of the window
+	 */
 	public JFrame getFrame() {
 		return frmEditView;
 	}
 	
+	/**
+	 * This method will get the name of the object being edited
+	 * @return a String of the name of the object being edited
+	 */
 	private String getName() {
 		//Retrieving the selected Faculty, Department, Program, or Course
 		if(windowType == 0) {
@@ -610,6 +713,10 @@ public class EditWindow {
 		}
 	}
 	
+	/**
+	 * This method returns the ID of the course being edited
+	 * @return A String object representing the ID of the course being edited
+	 */
 	private String getID() {
 		//Retrieving the selected Faculty, Department, Program, or Course
 		return faculty.getFacultySet().get(ListWindow.getCurrentFaculty()).
